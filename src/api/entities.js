@@ -9,6 +9,10 @@ export const ExamResult = base44.entities.ExamResult;
 
 export const AllowedEmail = base44.entities.AllowedEmail;
 
+export const CourseContent = base44.entities.CourseContent;
+
+export const RegisteredUser = base44.entities.RegisteredUser;
+
 
 
 // auth sdk:

@@ -10,6 +10,8 @@ import UserManagement from "./UserManagement";
 
 import Unauthorized from "./Unauthorized";
 
+import StorageInfo from "./StorageInfo";
+
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 
 const PAGES = {
@@ -23,6 +25,8 @@ const PAGES = {
     UserManagement: UserManagement,
     
     Unauthorized: Unauthorized,
+    
+    StorageInfo: StorageInfo,
     
 }
 
@@ -60,6 +64,8 @@ function PagesContent() {
                 <Route path="/UserManagement" element={<UserManagement />} />
                 
                 <Route path="/Unauthorized" element={<Unauthorized />} />
+                
+                <Route path="/StorageInfo" element={<StorageInfo />} />
                 
             </Routes>
         </Layout>

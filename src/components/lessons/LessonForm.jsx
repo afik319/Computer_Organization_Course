@@ -1,22 +1,57 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { X, Plus, Upload, Loader2 } from "lucide-react";
+import { X, Plus, Upload, Loader2, Edit2, Trash2 } from "lucide-react";
 import { UploadFile } from "@/api/integrations";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
-const TOPICS = [
-  { value: "processor_architecture", label: "ארכיטקטורת מעבדים" },
-  { value: "memory_systems", label: "מערכות זיכרון" },
-  { value: "instruction_sets", label: "סט הוראות" },
-  { value: "pipelining", label: "שיטות צנרת" },
-  { value: "cache", label: "זיכרון מטמון" },
-  { value: "io_systems", label: "מערכות קלט/פלט" },
-  { value: "assembly_language", label: "שפת סף" },
-  { value: "performance_optimization", label: "אופטימיזציית ביצועים" }
+// עורך טקסט עשיר
+import ReactQuill from 'react-quill';
+
+// נושאים ברירת מחדל לשימוש ראשוני
+const DEFAULT_TOPICS = [
+  { id: "topic_1", label: "ארכיטקטורת מעבדים" },
+  { id: "topic_2", label: "מערכות זיכרון" },
+  { id: "topic_3", label: "סט הוראות" },
+  { id: "topic_4", label: "שיטות צנרת" },
+  { id: "topic_5", label: "זיכרון מטמון" },
+  { id: "topic_6", label: "מערכות קלט/פלט" },
+  { id: "topic_7", label: "שפת סף" },
+  { id: "topic_8", label: "אופטימיזציית ביצועים" }
+];
+
+// הגדרת עורך טקסט
+const quillModules = {
+  toolbar: [
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    [{ 'color': [] }, { 'background': [] }],
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    [{ 'align': [] }],
+    ['link'],
+    ['clean']
+  ],
+};
+
+const quillFormats = [
+  'header',
+  'bold', 'italic', 'underline', 'strike',
+  'color', 'background',
+  'list', 'bullet',
+  'align',
+  'link'
 ];
 
 export default function LessonForm({ lesson, onSave, onCancel }) {
@@ -29,8 +64,45 @@ export default function LessonForm({ lesson, onSave, onCancel }) {
     attachments: [],
     order: 0
   });
+  
+  // הוספת מצב לניהול נושאים - שימוש ב-localStorage לשמירת נושאים מותאמים אישית
+  const [availableTopics, setAvailableTopics] = useState([]);
+  const [showTopicDialog, setShowTopicDialog] = useState(false);
+  const [newTopicLabel, setNewTopicLabel] = useState("");
+  
+  // טעינת נושאים מ-localStorage בעת טעינת הקומפוננטה
+  useEffect(() => {
+    const savedTopics = localStorage.getItem('lessonTopics');
+    if (savedTopics) {
+      try {
+        setAvailableTopics(JSON.parse(savedTopics));
+      } catch (error) {
+        console.error("Error loading saved topics:", error);
+        setAvailableTopics(DEFAULT_TOPICS);
+      }
+    } else {
+      setAvailableTopics(DEFAULT_TOPICS);
+    }
+  }, []);
+
+  // שמירת נושאים ל-localStorage בכל פעם שהם משתנים
+  useEffect(() => {
+    if (availableTopics.length > 0) {
+      localStorage.setItem('lessonTopics', JSON.stringify(availableTopics));
+    }
+  }, [availableTopics]);
 
   const handleInputChange = (field, value) => {
+    // מטפל במיוחד בשדה order כדי להבטיח שהוא מספר
+    if (field === 'order') {
+      // וידוא שהערך הוא מספר תקין ולא NaN
+      const numValue = Number(value);
+      value = isNaN(numValue) ? 0 : numValue;
+
+      // וידוא שערך ה-order מאוחסן כמספר ולא כמחרוזת
+      console.log(`Setting order to ${value} (${typeof value})`);
+    }
+    
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -38,9 +110,15 @@ export default function LessonForm({ lesson, onSave, onCancel }) {
     const file = event.target.files[0];
     if (!file) return;
 
+    // הצגת הודעת טעינה
     setIsUploading(true);
+    
     try {
+      console.log(`Starting file upload. Type: ${type}, Size: ${file.size} bytes, Name: ${file.name}`);
+      
+      // העלאת הקובץ ללא בדיקת גודל - אנחנו מסירים את המגבלה
       const { file_url } = await UploadFile({ file });
+      console.log(`Upload completed successfully. URL: ${file_url}`);
       
       if (type === 'video') {
         handleInputChange('video_url', file_url);
@@ -54,13 +132,41 @@ export default function LessonForm({ lesson, onSave, onCancel }) {
       }
     } catch (error) {
       console.error('Upload failed:', error);
+      // אפשר להוסיף כאן הודעת שגיאה למשתמש
+    } finally {
+      setIsUploading(false);
     }
-    setIsUploading(false);
   };
 
   const removeAttachment = (index) => {
     const newAttachments = formData.attachments.filter((_, i) => i !== index);
     handleInputChange('attachments', newAttachments);
+  };
+
+  // פונקציות לניהול נושאים
+  const addCustomTopic = () => {
+    if (!newTopicLabel) return;
+    
+    // יצירת מזהה מספרי חדש לנושא
+    let highestId = 0;
+    availableTopics.forEach(topic => {
+      const idMatch = topic.id.match(/topic_(\d+)/);
+      if (idMatch && parseInt(idMatch[1]) > highestId) {
+        highestId = parseInt(idMatch[1]);
+      }
+    });
+    
+    const newTopicId = `topic_${highestId + 1}`;
+    
+    setAvailableTopics(prev => [...prev, { id: newTopicId, label: newTopicLabel }]);
+    setNewTopicLabel("");
+  };
+
+  const removeTopic = (topicId) => {
+    setAvailableTopics(prev => prev.filter(topic => topic.id !== topicId));
+    if (formData.topic === topicId) {
+      setFormData(prev => ({ ...prev, topic: "" }));
+    }
   };
 
   return (
@@ -81,18 +187,78 @@ export default function LessonForm({ lesson, onSave, onCancel }) {
 
         <div className="space-y-3">
           <Label htmlFor="description" className="text-lg">תיאור</Label>
-          <Textarea
-            id="description"
-            value={formData.description}
-            onChange={(e) => handleInputChange('description', e.target.value)}
-            rows={4}
-            className="text-lg p-3 border-gray-300 focus:border-blue-800 focus:ring-1 focus:ring-blue-800"
-          />
+          <div className="text-editor-container" dir="rtl">
+            <ReactQuill
+              value={formData.description}
+              onChange={(content) => handleInputChange('description', content)}
+              modules={quillModules}
+              formats={quillFormats}
+              className="text-lg border-gray-300 rounded-md"
+              theme="snow"
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-6">
           <div className="space-y-3">
-            <Label htmlFor="topic" className="text-lg">נושא</Label>
+            <div className="flex justify-between items-center">
+              <Dialog open={showTopicDialog} onOpenChange={setShowTopicDialog}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm" className="flex items-center">
+                    <Edit2 className="ml-1 h-4 w-4" />
+                    ערוך נושאים
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="text-right">
+                  <DialogHeader>
+                    <DialogTitle>עריכת נושאים</DialogTitle>
+                    <DialogDescription>
+                      ניתן להוסיף נושאים חדשים או למחוק נושאים קיימים
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 py-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="topicLabel">שם הנושא</Label>
+                      <Input
+                        id="topicLabel"
+                        value={newTopicLabel}
+                        onChange={(e) => setNewTopicLabel(e.target.value)}
+                        className="text-right"
+                        dir="rtl"
+                        placeholder="לדוגמה: מערכות הפעלה"
+                      />
+                    </div>
+                    <Button 
+                      onClick={addCustomTopic} 
+                      disabled={!newTopicLabel}
+                      className="w-full"
+                    >
+                      הוסף נושא
+                    </Button>
+
+                    <div className="border-t pt-4">
+                      <h4 className="font-medium mb-2">נושאים קיימים</h4>
+                      <div className="space-y-2">
+                        {availableTopics.map(topic => (
+                          <div key={topic.id} className="flex justify-between items-center p-2 border rounded">
+                            <span>{topic.label}</span>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => removeTopic(topic.id)}
+                              className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+              <Label htmlFor="topic" className="text-lg">נושא</Label>
+            </div>
             <Select
               value={formData.topic}
               onValueChange={(value) => handleInputChange('topic', value)}
@@ -101,8 +267,8 @@ export default function LessonForm({ lesson, onSave, onCancel }) {
                 <SelectValue placeholder="בחרו נושא" />
               </SelectTrigger>
               <SelectContent>
-                {TOPICS.map(topic => (
-                  <SelectItem key={topic.value} value={topic.value} className="text-lg">
+                {availableTopics.map(topic => (
+                  <SelectItem key={topic.id} value={topic.id} className="text-lg">
                     {topic.label}
                   </SelectItem>
                 ))}
@@ -116,9 +282,13 @@ export default function LessonForm({ lesson, onSave, onCancel }) {
               id="order"
               type="number"
               value={formData.order}
-              onChange={(e) => handleInputChange('order', parseInt(e.target.value))}
-              className="text-lg p-3 border-gray-300 focus:border-blue-800 focus:ring-1 focus:ring-blue-800"
+              onChange={(e) => handleInputChange('order', parseInt(e.target.value, 10) || 0)}
+              min="0"
+              max="9999"
             />
+            <div className="text-sm text-gray-500">
+              מספר המייצג את סדר השיעור בתוך הנושא. השתמש במספרים שלמים חיוביים (1, 2, וכו').
+            </div>
           </div>
         </div>
 
@@ -150,7 +320,7 @@ export default function LessonForm({ lesson, onSave, onCancel }) {
                     {isUploading ? (
                       <div className="flex items-center gap-3">
                         <Loader2 className="h-6 w-6 animate-spin text-blue-800" />
-                        <span className="text-lg font-medium">מעלה...</span>
+                        <span className="text-lg font-medium">מעלה... תהליך זה עשוי להימשך זמן מה</span>
                       </div>
                     ) : (
                       <div className="flex flex-col items-center gap-3">

@@ -4,48 +4,70 @@ import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const TOPICS_MAP = {
-  "processor_architecture": "ארכיטקטורת מעבדים",
-  "memory_systems": "מערכות זיכרון",
-  "instruction_sets": "סט הוראות",
-  "pipelining": "שיטות צנרת",
-  "cache": "זיכרון מטמון",
-  "io_systems": "מערכות קלט/פלט",
-  "assembly_language": "שפת סף",
-  "performance_optimization": "אופטימיזציית ביצועים"
+// מיפוי מותאם של נושאים לשם תצוגה
+const getTopicLabel = (topicId) => {
+  try {
+    const savedTopics = localStorage.getItem('lessonTopics');
+    if (savedTopics) {
+      const topics = JSON.parse(savedTopics);
+      const topic = topics.find(t => t.id === topicId);
+      return topic ? topic.label : topicId;
+    }
+  } catch (error) {
+    console.error("Error getting topic label:", error);
+  }
+  
+  // ברירת מחדל אם לא מצאנו את הנושא או הייתה שגיאה
+  return "נושא לא מוגדר";
 };
 
 export default function LessonList({ lessons, onSelect, selectedLesson, onEdit }) {
-  const topics = Array.from(new Set(lessons.map(l => l.topic)));
+  // נגן על הקריאה ל-map בעזרת ערך ברירת מחדל
+  const safeLessons = Array.isArray(lessons) ? lessons : [];
+  
+  // Log the lessons we received to debug
+  console.log("LessonList received lessons:", safeLessons);
+  
+  // יצירת מיפוי נושאים ייחודיים
+  const sortedLessons = safeLessons.slice().sort((a, b) => a.order - b.order);
+  const topics = Array.from(new Set(sortedLessons.map(l => l.topic)));
+
+  // Early return if no lessons
+  if (safeLessons.length === 0) {
+    return (
+      <div className="bg-white rounded-lg border shadow-md p-6 text-center">
+        <p className="text-lg text-gray-600">אין שיעורים זמינים כרגע</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-lg border shadow-md">
       <ScrollArea className="h-[calc(100vh-220px)]">
         <div className="p-6">
-          {topics.map(topic => {
-            const topicLessons = lessons.filter(l => l.topic === topic);
+          {topics.map((topic, topicIndex) => {
+            const topicLessons = sortedLessons.filter(l => l.topic === topic);
             return (
               <div key={topic} className="mb-8 last:mb-0">
-                <h3 className="text-lg font-bold text-blue-800 mb-4 border-b pb-2">
-                  {TOPICS_MAP[topic] || topic}
-                </h3>
+                <h3 className="text-xl font-bold text-blue-800 mb-4 border-b pb-2 text-right" dir="rtl">
+  <span>{`${topicIndex + 1}. ${getTopicLabel(topic)}`}</span>
+</h3>
+
                 <div className="space-y-2">
                   {topicLessons.map(lesson => (
                     <div
                       key={lesson.id}
                       className={cn(
-                        "flex items-center justify-between p-3 rounded-lg transition-all",
+                        "flex items-center justify-between p-3 rounded-lg transition-all cursor-pointer",
                         selectedLesson?.id === lesson.id
                           ? "bg-blue-50 text-blue-800 shadow-sm"
                           : "hover:bg-gray-50"
                       )}
+                      onClick={() => onSelect(lesson)}
                     >
-                      <button
-                        className="flex-1 text-right text-lg"
-                        onClick={() => onSelect(lesson)}
-                      >
+                      <div className="flex-1 text-right text-lg">
                         {lesson.title}
-                      </button>
+                      </div>
                       {onEdit && (
                         <Button
                           variant="ghost"
