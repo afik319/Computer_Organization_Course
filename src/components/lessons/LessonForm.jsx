@@ -10,7 +10,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -21,14 +20,16 @@ import ReactQuill from 'react-quill';
 
 // נושאים ברירת מחדל לשימוש ראשוני
 const DEFAULT_TOPICS = [
-  { id: "topic_1", label: "ארכיטקטורת מעבדים" },
-  { id: "topic_2", label: "מערכות זיכרון" },
-  { id: "topic_3", label: "סט הוראות" },
-  { id: "topic_4", label: "שיטות צנרת" },
-  { id: "topic_5", label: "זיכרון מטמון" },
-  { id: "topic_6", label: "מערכות קלט/פלט" },
-  { id: "topic_7", label: "שפת סף" },
-  { id: "topic_8", label: "אופטימיזציית ביצועים" }
+  { id: "topic_1", label: "הקדמה" },
+  { id: "topic_2", label: "שיטות לייצוג מספרים" },
+  { id: "topic_3", label: "מערכים והקצאת מקום בזיכרון" },
+  { id: "topic_4", label: "מעגלים לוגיים" },
+  { id: "topic_5", label: "חישוב זמן עיבוד" },
+  { id: "topic_6", label: "הקדמה לרגיסטרים" },
+  { id: "topic_7", label: "סוגי פקודות שונים" },
+  { id: "topic_8", label: "המעבד החד מחזורי" },
+  { id: "topic_9", label: "המעבד בתצורת צנרת" },
+  { id: "topic_10", label: "זיכרון המטמון" }
 ];
 
 // הגדרת עורך טקסט

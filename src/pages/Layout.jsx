@@ -8,18 +8,20 @@ import { User } from "@/api/entities";
 import { RegisteredUser } from "@/api/entities";
 import { cn } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
+import { useGoogleAuth } from "@/auth/GoogleAuth";
 
 // Define the super admin email for admin features only
 const SUPER_ADMIN_EMAIL = "afik.ratzon@gmail.com";
 
 export default function Layout({ children, currentPageName }) {
+  const { login, logout } = useGoogleAuth(); 
   const [currentUser, setCurrentUser] = useState(null);
   const [userPermission, setUserPermission] = useState(null);
   const [loading, setLoading] = useState(true);
   const [checkingPermission, setCheckingPermission] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
   const navigate = useNavigate();
-
+  
   // Check if user has permission to access the system - wrapped in useCallback
   const checkUserPermission = useCallback(async (email) => {
     if (!email) return null;
@@ -152,11 +154,39 @@ export default function Layout({ children, currentPageName }) {
       setCheckingPermission(false);
     }
   };
+  
+  useEffect(() => {
+    const checkUserSession = async () => {
+      const user = await User.me();
+      if (user) {
+        setCurrentUser(user);
+        setUserPermission(user.status);
+      }
+    };
+  
+    checkUserSession();
+  }, []);
 
-  // Add login and logout functions that were missing
   const handleLogin = async () => {
     try {
-      await User.login();
+      const userInfo = await login();
+
+      console.log("User info received:", userInfo);
+
+      if (!userInfo || typeof userInfo.email !== 'string' || !userInfo.email.trim()) {
+        throw new Error("Invalid user data");
+      }
+
+      const user = await User.login(userInfo.email, userInfo.name || '');
+
+      console.log("User logged in:", user);
+      setCurrentUser(user);
+
+      if (user.status === "approved") {
+        navigate(createPageUrl("Dashboard"));
+      } else {
+        setUserPermission(user.status);
+      }
     } catch (error) {
       console.error("Login error:", error);
     }
@@ -164,12 +194,13 @@ export default function Layout({ children, currentPageName }) {
 
   const handleLogout = async () => {
     try {
-      await User.logout();
+      logout();
       window.location.reload();
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error('Logout error:', error);
     }
   };
+
 
   // Use this effect to check user session and permissions once on load
   useEffect(() => {

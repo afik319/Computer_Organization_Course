@@ -23,7 +23,6 @@ import ExamTaker from "../components/exams/ExamTaker";
 import { User } from "@/api/entities";
 import { Exam } from "@/api/entities";
 import { ExamResult } from "@/api/entities";
-import { RegisteredUser } from "@/api/entities";
 
 // Define super admin email directly here too
 const SUPER_ADMIN_EMAIL = "afik.ratzon@gmail.com";
@@ -193,8 +192,11 @@ export default function ExamsPage() {
         exam_id: examId,
         answers: answers,
         score: score,
-        completed_date: new Date().toISOString()
+        completed_date: new Date().toISOString(),
+        created_by: currentUser.email, // רק אם המשתמש יוצר בעצמו את התוצאה
+        is_sample: false
       });
+      
       
       toast({
         title: "בחינה הושלמה",

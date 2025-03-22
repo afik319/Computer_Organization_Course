@@ -32,13 +32,14 @@ export default function StorageInfo() {
         }
 
         // Load all data to calculate size
-        const [lessons, exams, examResults, courseContents, registeredUsers] = await Promise.all([
-          Lesson.list(),
+        const lessons = Lesson.getAllLessons(); // טוען מה-JSON במקום מה-API
+        const [exams, examResults, courseContents, registeredUsers] = await Promise.all([
           Exam.list(),
           ExamResult.list(),
           CourseContent.list(),
           RegisteredUser.list()
         ]);
+
 
         // Count attachments and videos
         let videoCount = 0;
@@ -215,7 +216,7 @@ export default function StorageInfo() {
                 <Image className="h-5 w-5" />
                 תוכן קורס
               </div>
-              <p className="text-2xl font-bold">{storageInfo.records.courseContents}</p>
+              <p className="text-2xl font-bold">{storageInfo.records.courseContents || 0}</p>
             </div>
             
             <div className="bg-indigo-50 p-4 rounded-lg">

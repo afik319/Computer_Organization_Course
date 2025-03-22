@@ -1,0 +1,71 @@
+{
+  "registeredUsers": [
+    {
+      "email": "afik.ratzon@gmail.com",
+      "full_name": "Afik Ratzon",
+      "status": "approved",
+      "request_date": null,
+      "approval_date": "2025-03-18T23:57:56.351Z",
+      "notes": null,
+      "id": "67da087782cf23484edc17d6",
+      "created_date": "2025-03-18T23:57:43.838000",
+      "updated_date": "2025-03-18T23:57:56.470000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    },
+    {
+      "email": "gylysymyntyb@gmail.com",
+      "full_name": "גילי סימן טוב",
+      "status": "approved",
+      "request_date": "2025-03-19T00:53:25.431Z",
+      "approval_date": "2025-03-19T00:53:30.803Z",
+      "notes": null,
+      "id": "67da158582cf23484edc5141",
+      "created_date": "2025-03-19T00:53:25.505000",
+      "updated_date": "2025-03-19T00:53:31.145000",
+      "created_by": "gylysymyntyb@gmail.com",
+      "is_sample": false
+    },
+    {
+      "email": "noa207207@gmail.com",
+      "full_name": "Noa Elharrar",
+      "status": "approved",
+      "request_date": "2025-03-20T11:02:24.430Z",
+      "approval_date": "2025-03-20T11:04:04.384Z",
+      "notes": null,
+      "id": "67dbf5c1ffc0b181445ce5a3",
+      "created_date": "2025-03-20T11:02:25.150000",
+      "updated_date": "2025-03-20T11:04:04.661000",
+      "created_by": "noa207207@gmail.com",
+      "is_sample": false
+    },
+    {
+      "email": "omer8118@gmail.com",
+      "full_name": "עומר לבל",
+      "status": "approved",
+      "request_date": "2025-03-20T11:26:12.528Z",
+      "approval_date": "2025-03-20T11:40:25.927Z",
+      "notes": null,
+      "id": "67dbfb55785012c3f65c248c",
+      "created_date": "2025-03-20T11:26:13.208000",
+      "updated_date": "2025-03-20T11:40:26.377000",
+      "created_by": "omer8118@gmail.com",
+      "is_sample": false
+    },
+    {
+      "email": "andro3199@gmail.com",
+      "full_name": "שי שלומי",
+      "status": "approved",
+      "request_date": "2025-03-20T13:16:20.643Z",
+      "approval_date": "2025-03-20T13:16:24.427Z",
+      "notes": null,
+      "id": "67dc1524785012c3f65cd180",
+      "created_date": "2025-03-20T13:16:20.740000",
+      "updated_date": "2025-03-20T13:16:25.294000",
+      "created_by": "andro3199@gmail.com",
+      "is_sample": false
+    }
+  ],
+  "exportDate": "2025-03-20T17:01:32.087Z",
+  "exportedBy": "afik.ratzon@gmail.com"
+}

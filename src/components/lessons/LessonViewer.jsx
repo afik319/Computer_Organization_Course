@@ -1,7 +1,9 @@
 import React from 'react';
+import LessonVideo from '@/components/lessons/LessonVideo'; // ודא שהנתיב נכון בהתאם למבנה הפרויקט
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText, Download, Trash2 } from "lucide-react";
+import { Link } from "react-router-dom";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,23 +34,19 @@ export default function LessonViewer({ lesson, onDelete }) {
           <CardTitle className="text-2xl font-bold text-right">{lesson.title}</CardTitle>
         </CardHeader>
         <CardContent className="p-6 space-y-6">
-          {lesson.video_url && (
+          {/* הטמעת וידאו: אם video_url מוגדר, נשתמש ב-LessonVideo */}
+          {lesson.video_url ? (
             <div className="aspect-video rounded-lg overflow-hidden bg-gray-900">
-              <video
-                controls
-                className="w-full h-full"
-                src={lesson.video_url}
-                poster="/video-placeholder.png"
-              >
-                הדפדפן שלך לא תומך בתג וידאו.
-              </video>
+              <LessonVideo lesson={lesson} />
             </div>
+          ) : (
+            <p></p>
           )}
 
           <div className="space-y-4">
             <div 
               className="prose prose-blue max-w-none text-lg leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: lesson.description || 'אין תיאור לשיעור זה.' }}
+              dangerouslySetInnerHTML={{ __html: lesson.description || '' }}
             />
           </div>
 
@@ -86,7 +84,7 @@ export default function LessonViewer({ lesson, onDelete }) {
             </div>
           )}
         </CardContent>
-        
+
         {onDelete && (
           <CardFooter className="p-6 border-t bg-gray-50">
             <Button 
@@ -107,7 +105,6 @@ export default function LessonViewer({ lesson, onDelete }) {
             <AlertDialogTitle>האם אתה בטוח שברצונך למחוק שיעור זה?</AlertDialogTitle>
             <AlertDialogDescription>
               פעולה זו תמחק לצמיתות את השיעור ואת כל תוכנו, כולל וידאו וקבצים מצורפים.
-              לא ניתן לשחזר את המידע לאחר המחיקה.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="flex-row-reverse justify-start">

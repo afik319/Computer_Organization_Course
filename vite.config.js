@@ -6,7 +6,13 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   server: {
-    allowedHosts: true
+    allowedHosts: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001', // הכתובת של שרת Express שלך
+        changeOrigin: true,
+      },
+    },
   },
   resolve: {
     alias: {
@@ -21,4 +27,4 @@ export default defineConfig({
       },
     },
   },
-}) 
+})

@@ -3,6 +3,7 @@ import { User } from "@/api/entities";
 import { RegisteredUser } from "@/api/entities";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+// import storage from "../storage";
 import {
   Card,
   CardContent,
@@ -148,6 +149,7 @@ export default function UserManagementPage() {
   }, [checkUserPermissions]);
   
   useEffect(() => {
+    //console.error("USER OBJECT:", User);
     loadData();
   }, [loadData]);
 
@@ -170,7 +172,7 @@ export default function UserManagementPage() {
     }
     
     try {
-      await RegisteredUser.delete(userId);
+      await RegisteredUser.remove(userId);
       setUsers(users.filter(user => user.id !== userId));
       
       toast({
@@ -188,82 +190,72 @@ export default function UserManagementPage() {
   };
   
   const handleApproveUser = async (user) => {
-    try {
-      // Clean user object - ensure it has proper status
-      const updateData = {
-        email: user.email,
-        full_name: user.full_name || "",
-        status: "approved", // Explicitly set the status
-        approval_date: new Date().toISOString()
-      };
-      
-      // Make sure we clean up any old entries for this user first
-      const allUsers = await RegisteredUser.list();
-      const userEntries = allUsers.filter(u => u.email === user.email);
-      
-      // Delete all old entries except the one we're updating
-      for (const entry of userEntries) {
-        if (entry.id !== user.id) {
-          await RegisteredUser.delete(entry.id);
-          console.log("Deleted duplicate entry:", entry.id);
-        }
+      try {
+        // const allUsers = storage.get("users") || [];
+    
+        // // עדכון הסטטוס של המשתמש למאושר
+        // const updatedUsers = allUsers.map(u =>
+        //   u.email === user.email ? { ...u, status: "approved", approval_date: new Date().toISOString() } : u
+        // );
+    
+        // storage.set("users", updatedUsers);
+        // setUsers(updatedUsers);
+
+           // מעדכן את הסטטוס ל־approved ב־RegisteredUser (ששומר תחת "registeredUsers")
+        await RegisteredUser.update(user.id, {
+          status: "approved",
+          approval_date: new Date().toISOString(),
+        });
+
+        // טוען מחדש את הרשימה מ־RegisteredUser.list() ומעדכן state
+        await loadData();
+
+        toast({
+          title: "בקשה אושרה",
+          description: `בקשת הגישה של ${user.email} אושרה בהצלחה`,
+        });
+    
+      } catch (error) {
+        console.error("Error approving user:", error);
+        toast({
+          title: "שגיאה באישור משתמש",
+          description: "אירעה שגיאה באישור בקשת המשתמש",
+          variant: "destructive"
+        });
       }
-      
-      // Now update the main entry
-      await RegisteredUser.update(user.id, updateData);
-      
-      // Update local state
-      setUsers(users.map(u => 
-        u.id === user.id ? {
-          ...u, 
-          ...updateData
-        } : u
-      ));
-      
-      // Remove any other entries with the same email from the UI
-      setUsers(prevUsers => 
-        prevUsers.filter(u => u.id === user.id || u.email !== user.email)
-      );
-      
-      toast({
-        title: "בקשה אושרה",
-        description: `בקשת הגישה של ${user.email} אושרה בהצלחה`,
-      });
-      
-      // Force reload the user list to ensure clean data
-      loadData();
-      
-    } catch (error) {
-      console.error("Error approving user:", error);
-      toast({
-        title: "שגיאה באישור משתמש",
-        description: "אירעה שגיאה באישור בקשת המשתמש",
-        variant: "destructive"
-      });
-    }
-  };
-  
-  const handleRejectUser = async (user) => {
-    try {
-      // Delete the user entry completely
-      await RegisteredUser.delete(user.id);
-      
-      // Update the UI
-      setUsers(users.filter(u => u.id !== user.id));
-      
-      toast({
-        title: "בקשה נדחתה",
-        description: `בקשת הגישה של ${user.email} נדחתה והוסרה`,
-      });
-    } catch (error) {
-      console.error("Error rejecting user:", error);
-      toast({
-        title: "שגיאה בדחיית משתמש",
-        description: "אירעה שגיאה בדחיית בקשת המשתמש",
-        variant: "destructive"
-      });
-    }
-  };
+    };
+    
+    
+    const handleRejectUser = async (user) => {
+      try {
+        // const allUsers = storage.get("users") || [];
+    
+        // // הסרת המשתמש מהרשימה
+        // const updatedUsers = allUsers.filter(u => u.email !== user.email);
+    
+        // storage.set("users", updatedUsers);
+        // setUsers(updatedUsers);
+        
+           // אפשרות 1: למחוק לגמרי
+        await RegisteredUser.remove(user.id);
+
+        // רענון הרשימה מתוך RegisteredUser.list()
+        await loadData();
+
+        toast({
+          title: "בקשה נדחתה",
+          description: `בקשת הגישה של ${user.email} נדחתה`,
+        });
+    
+      } catch (error) {
+        console.error("Error rejecting user:", error);
+        toast({
+          title: "שגיאה בדחיית משתמש",
+          description: "אירעה שגיאה בדחיית בקשת המשתמש",
+          variant: "destructive"
+        });
+      }
+    };
   
   const handleAddUser = async () => {
     if (!newUserEmail.trim()) {

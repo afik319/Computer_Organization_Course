@@ -67,16 +67,17 @@ export default function Dashboard() {
         }
       }
 
-      const [courseContents, lessons, exams, examResults] = await Promise.all([
+      const [courseContents, exams, examResults] = await Promise.all([
         CourseContent.list(),
-        Lesson.list(),
         Exam.list(),
         ExamResult.list()
-      ]);
-      
+    ]);
+    
+    // טוען את השיעורים מה-JSON במקום מה-API
+    const lessons = Lesson.getAllLessons();
+    
       if (courseContents && courseContents.length > 0) {
         setCourseContent(courseContents[0]);
-        console.log("Loaded course content:", courseContents[0]);
       }
 
       const isSuperAdmin = user?.email === SUPER_ADMIN_EMAIL;
@@ -186,9 +187,15 @@ export default function Dashboard() {
         setCourseContent(updatedContent);
 
       } else {
-        const newContent = await CourseContent.create(contentData);
+        const newContent = await CourseContent.create({
+            title: contentData.title || "כותרת ברירת מחדל",
+            description: contentData.description || "תיאור ברירת מחדל",
+            last_updated: new Date().toISOString(),
+            updated_by: currentUser?.email || "system",
+            created_by: currentUser?.email || "system",
+            is_sample: false
+        });
         setCourseContent(newContent);
-
       }
       
       setShowEditDialog(false);

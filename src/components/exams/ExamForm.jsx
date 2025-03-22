@@ -44,29 +44,33 @@ export default function ExamForm({ exam, onSave, onCancel }) {
       } catch (error) {
         console.error("Error loading saved topics:", error);
         const defaultTopics = [
-          { id: "processor_architecture", label: "ארכיטקטורת מעבדים" },
-          { id: "memory_systems", label: "מערכות זיכרון" },
-          { id: "instruction_sets", label: "סט הוראות" },
-          { id: "pipelining", label: "שיטות צנרת" },
-          { id: "cache", label: "זיכרון מטמון" },
-          { id: "io_systems", label: "מערכות קלט/פלט" },
-          { id: "assembly_language", label: "שפת סף" },
-          { id: "performance_optimization", label: "אופטימיזציית ביצועים" }
-        ];
+          { id: "topic_1", label: "הקדמה" },
+          { id: "topic_2", label: "שיטות לייצוג מספרים" },
+          { id: "topic_3", label: "מערכים והקצאת מקום בזיכרון" },
+          { id: "topic_4", label: "מעגלים לוגיים" },
+          { id: "topic_5", label: "חישוב זמן עיבוד" },
+          { id: "topic_6", label: "הקדמה לרגיסטרים" },
+          { id: "topic_7", label: "סוגי פקודות שונים" },
+          { id: "topic_8", label: "המעבד החד מחזורי" },
+          { id: "topic_9", label: "המעבד בתצורת צנרת" },
+          { id: "topic_10", label: "זיכרון המטמון" }
+        ];        
         setAvailableTopics(defaultTopics);
         localStorage.setItem('examTopics', JSON.stringify(defaultTopics));
       }
     } else {
       const defaultTopics = [
-        { id: "processor_architecture", label: "ארכיטקטורת מעבדים" },
-        { id: "memory_systems", label: "מערכות זיכרון" },
-        { id: "instruction_sets", label: "סט הוראות" },
-        { id: "pipelining", label: "שיטות צנרת" },
-        { id: "cache", label: "זיכרון מטמון" },
-        { id: "io_systems", label: "מערכות קלט/פלט" },
-        { id: "assembly_language", label: "שפת סף" },
-        { id: "performance_optimization", label: "אופטימיזציית ביצועים" }
-      ];
+        { id: "topic_1", label: "הקדמה" },
+        { id: "topic_2", label: "שיטות לייצוג מספרים" },
+        { id: "topic_3", label: "מערכים והקצאת מקום בזיכרון" },
+        { id: "topic_4", label: "מעגלים לוגיים" },
+        { id: "topic_5", label: "חישוב זמן עיבוד" },
+        { id: "topic_6", label: "הקדמה לרגיסטרים" },
+        { id: "topic_7", label: "סוגי פקודות שונים" },
+        { id: "topic_8", label: "המעבד החד מחזורי" },
+        { id: "topic_9", label: "המעבד בתצורת צנרת" },
+        { id: "topic_10", label: "זיכרון המטמון" }
+      ];      
       setAvailableTopics(defaultTopics);
       localStorage.setItem('examTopics', JSON.stringify(defaultTopics));
     }

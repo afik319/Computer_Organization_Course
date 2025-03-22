@@ -1,0 +1,318 @@
+{ 
+  "lessons": [
+    {
+      "title": "הקדמה",
+      "description": "<h2 class=\"ql-align-right\">👋 <strong>ברוכים הבאים לקורס!</strong></h2><p class=\"ql-align-right\"><br></p><h2 class=\"ql-align-right\"><strong>🎯 במהלך הסרטונים תראו את המצגת ברקע – אין צורך לקרוא ממנה תוך כדי</strong>.</h2><h2 class=\"ql-align-right\">תוכלו להיעזר בה כדי לעקוב אחרי ההסברים בצורה נוחה במידת הצורך.</h2><p class=\"ql-align-right\"><br></p><h2 class=\"ql-align-right\">✨ כל המצגות זמינות גם להורדה – כך שתוכלו לחזור אליהן מתי שתרצו.</h2><p class=\"ql-align-right\"><br></p><h2 class=\"ql-align-right\">💪 לרשותכם מקבצי בחינות ושאלות תרגול שיעזרו לכם לבדוק את ההבנה ולתרגל כמו במבחן אמיתי.</h2>",
+      "topic": "topic_1",
+      "video_url": "",
+      "attachments": [],
+      "order": 1,
+      "id": "67d94469b0e0603ece944c1f",
+      "created_date": "2025-03-18T10:01:13.677000",
+      "updated_date": "2025-03-19T12:40:54.875000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    },
+    {
+      "title": "שיטות לייצוג מספרים",
+      "description": "<p> </p>",
+      "topic": "topic_2",
+      "video_url": "/api/get-video-link?fileName=שיטות ליצוג מספרים.mp4 ",
+      "attachments": [
+        {
+          "title": "שיטות ייצוג מספרים.pdf",
+          "file_url": "/api/get-file-link?fileName=שיטות לייצוג מספרים.pdf",
+          "type": "pdf"
+        }
+      ],
+      "order": 1,
+      "id": "67dab8ca967d7ee72b944606",
+      "created_date": "2025-03-19T12:30:02.775000",
+      "updated_date": "2025-03-19T17:55:10.772000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    },
+    {
+      "title": "מערכים והקצאת מקום בזיכרון",
+      "description": "<h2 class=\"ql-align-right\"><strong>קראו את המצגת המצורפת</strong></h2>",
+      "topic": "topic_3",
+      "video_url": "",
+      "attachments": [
+        {
+          "title": "מערכים והקצאת מקום בזיכרון.pdf",
+          "file_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/20de5a_.pdf",
+          "type": "pdf"
+        }
+      ],
+      "order": 1,
+      "id": "67dabb9765512fc49f1b9464",
+      "created_date": "2025-03-19T12:41:59.267000",
+      "updated_date": "2025-03-19T17:36:20.066000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    },
+    {
+      "title": "חישוב זמן עיבוד",
+      "description": "<p> </p>",
+      "topic": "topic_4",
+      "video_url": "/api/get-video-link?fileName=חישוב זמני עיבוד.mp4",
+      "attachments": [
+        {
+          "title": "חישוב זמן עיבוד.pdf",
+          "file_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/1a911e_.pdf",
+          "type": "pdf"
+        }
+      ],
+      "order": 1,
+      "id": "67dada979b1ee776e1b66aa3",
+      "created_date": "2025-03-19T14:54:15.283000",
+      "updated_date": "2025-03-19T17:36:23.979000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    },
+    {
+      "title": "מעגלים לוגיים",
+      "description": "<p> </p>",
+      "topic": "topic_5",
+      "video_url": "/api/get-video-link?fileName=מעגלים לוגיים.mp4",
+      "attachments": [
+        {
+          "title": "מעגלים לוגיים.pdf",
+          "file_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/59b427_.pdf",
+          "type": "pdf"
+        }
+      ],
+      "order": 1,
+      "id": "67dadafe20cbe9c9a558d884",
+      "created_date": "2025-03-19T14:55:58.832000",
+      "updated_date": "2025-03-19T17:36:27.486000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    },
+    {
+      "title": "הקדמה לרגיסטרים",
+      "description": "",
+      "topic": "topic_6",
+      "video_url": "/api/get-video-link?fileName=registers.mp4",
+      "attachments": [
+        {
+          "title": "הקדמה לרגיסטרים.pdf",
+          "file_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/4b338f_.pdf",
+          "type": "pdf"
+        }
+      ],
+      "order": 1,
+      "id": "67dadb8a20cbe9c9a558dad3",
+      "created_date": "2025-03-19T14:58:18.484000",
+      "updated_date": "2025-03-19T17:36:30.801000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    },
+    {
+      "title": "סוגי פקודות שונים - חלק א",
+      "description": "",
+      "topic": "topic_7",
+      "video_url": "/api/get-video-link?fileName=סוגי הפקודות - חלק א.mp4",
+      "attachments": [
+        {
+          "title": "סוגי פקודות שונים.pdf",
+          "file_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/43b5b5_.pdf",
+          "type": "pdf"
+        }
+      ],
+      "order": 1,
+      "id": "67daf3121c5afed239839ab2",
+      "created_date": "2025-03-19T16:38:42.714000",
+      "updated_date": "2025-03-19T17:36:34.399000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    },
+    {
+      "title": "סוגי פקודות שונים - חלק ב",
+      "description": "",
+      "topic": "topic_7",
+      "video_url": "/api/get-video-link?fileName=סוגי הפקודות - חלק ב.mp4",
+      "attachments": [
+        {
+          "title": "סוגי פקודות שונים.pdf",
+          "file_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/43b5b5_.pdf",
+          "type": "pdf"
+        }
+      ],
+      "order": 2,
+      "id": "67daf3121c5afed239839ab2",
+      "created_date": "2025-03-19T16:38:42.714000",
+      "updated_date": "2025-03-19T17:36:34.399000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    },
+    {
+      "title": "המעבד החד מחזורי",
+      "description": "<p> </p>",
+      "topic": "topic_8",
+      "video_url": "/api/get-video-link?fileName=חד מחזורי.mp4",
+      "attachments": [
+        {
+          "title": "המעבד החד מחזורי.pdf",
+          "file_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/9b31da_.pdf",
+          "type": "pdf"
+        }
+      ],
+      "order": 1,
+      "id": "67daf3751c5afed239839c3a",
+      "created_date": "2025-03-19T16:40:21.539000",
+      "updated_date": "2025-03-19T17:36:38.699000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    },
+    {
+      "title": "הקדמה + מחזור שעון 1",
+      "description": "",
+      "topic": "topic_9",
+      "video_url": "/api/get-video-link?fileName=pipeline-cycle-1.mp4",
+      "attachments": [
+        {
+          "title": "המעבד בתצורת צנרת.pdf",
+          "file_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/334032_.pdf",
+          "type": "pdf"
+        }
+      ],
+      "order": 1,
+      "id": "67daf3bc967d7ee72b951f3d",
+      "created_date": "2025-03-19T16:41:32.330000",
+      "updated_date": "2025-03-19T17:37:10.510000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    },
+    {
+      "title": "שיטות מיפוי בזיכרון המטמון",
+      "description": "<p> </p>",
+      "topic": "topic_10",
+      "video_url": "/api/get-video-link?fileName=שיטות מיפוי בזיכרון המטמון.mp4",
+      "attachments": [
+        {
+          "title": "שיטות מיפוי בזיכרון המטמון.pdf",
+          "file_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/9e4d25_.pdf",
+          "type": "pdf"
+        }
+      ],
+      "order": 11,
+      "id": "67dafc1734dedd6655943681",
+      "created_date": "2025-03-19T17:17:11.279000",
+      "updated_date": "2025-03-19T17:38:05.461000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    },
+    {
+      "title": "מדידת ביצועי המטמון",
+      "description": "<p> </p>",
+      "topic": "topic_10",
+      "video_url": "/api/get-video-link?fileName=מדידת ביצועי המטמון.mp4",
+      "attachments": [
+        {
+          "title": "מדידת ביצועי המטמון.pdf",
+          "file_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/3187b4_.pdf",
+          "type": "pdf"
+        }
+      ],
+      "order": 12,
+      "id": "67dafc8105af2ec0e4a7e482",
+      "created_date": "2025-03-19T17:18:57.985000",
+      "updated_date": "2025-03-19T17:38:12.800000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    },
+    {
+      "title": "מחזורי שעון 2-3",
+      "description": "<p> </p>",
+      "topic": "topic_9",
+      "video_url": "/api/get-video-link?fileName=צנרת - חלק ב (מחזור 2,3).mp4",
+      "attachments": [],
+      "order": 2,
+      "id": "67dafe224b8940c3c09e70c5",
+      "created_date": "2025-03-19T17:25:54.651000",
+      "updated_date": "2025-03-19T17:37:13.653000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    },
+    {
+      "title": "מחזורי שעון 4-5",
+      "description": "<p>...</p>",
+      "topic": "topic_9",
+      "video_url": "/api/get-video-link?fileName=pipeline-part-c-cycles45.mp4",
+      "attachments": [],
+      "order": 3,
+      "id": "67dafe834b8940c3c09e723f",
+      "created_date": "2025-03-19T17:27:31.099000",
+      "updated_date": "2025-03-19T17:37:18.215000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    },
+    {
+      "title": "פיתרון העברה קדימה",
+      "description": "<p> </p>",
+      "topic": "topic_9",
+      "video_url": "/api/get-video-link?fileName=pipeline-move-forward.mp4",
+      "attachments": [],
+      "order": 4,
+      "id": "67dafea7f5c98ee65a6c5156",
+      "created_date": "2025-03-19T17:28:07.771000",
+      "updated_date": "2025-03-19T17:36:59.753000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    },
+    {
+      "title": "בקרות וחריגות",
+      "description": "<p> </p>",
+      "topic": "topic_9",
+      "video_url": "/api/get-video-link?fileName=צנרת - חלק ה (בקרות וחריגות).mp4",
+      "attachments": [],
+      "order": 5,
+      "id": "67dafebcf5c98ee65a6c51c9",
+      "created_date": "2025-03-19T17:28:28.394000",
+      "updated_date": "2025-03-19T17:38:25.147000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    },
+    {
+      "title": "Signed Magnitude",
+      "description": "<h2 class=\"ql-align-right\"><strong>קראו את השקף המצורף</strong></h2>",
+      "topic": "topic_2",
+      "video_url": "",
+      "attachments": [
+        {
+          "title": "Singed Magnitude.pdf",
+          "file_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/4ca282_SingedMagnitude.pdf",
+          "type": "pdf"
+        }
+      ],
+      "order": 2,
+      "id": "67db005ce8df07753c0b80b7",
+      "created_date": "2025-03-19T17:35:24.119000",
+      "updated_date": "2025-03-19T17:35:37.567000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    },
+    {
+      "title": "חיבור חיסור וכפל בבסיסים שונים",
+      "description": "<h2 class=\"ql-align-right\"><strong>עיינו בקובץ הדוגמאות המצורף</strong></h2>",
+      "topic": "topic_2",
+      "video_url": "",
+      "attachments": [
+        {
+          "title": "חיבור חיסור וכפל בבסיסים שונים.pdf",
+          "file_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/dcd341_.pdf",
+          "type": "pdf"
+        }
+      ],
+      "order": 3,
+      "id": "67db014e0115e009cf0d906c",
+      "created_date": "2025-03-19T17:39:26.731000",
+      "updated_date": "2025-03-19T17:39:26.731000",
+      "created_by": "afik.ratzon@gmail.com",
+      "is_sample": false
+    }
+  ],
+  "exportDate": "2025-03-20T15:19:38.230Z",
+  "exportedBy": "afik.ratzon@gmail.com"
+}
