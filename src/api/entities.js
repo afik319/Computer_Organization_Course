@@ -1,8 +1,5 @@
 import storage from "./storage";
-import examResultsData from "../data/ExamResults.json";
 import lessonsData from '../data/lessonsData.json';
-import examsData from "@/data/exams.json";
-import registeredUsersData from "../data/registeredUsers.json";
 import { generateId } from "@/utils/utils";
 import courseContentData from "../data/courseContent.json";
 import { User } from "./User";
@@ -20,13 +17,11 @@ export class Lesson {
         created_date = new Date().toISOString(),
         updated_date = new Date().toISOString(),
         created_by = null,
-        is_sample = false
     }) {
         this.id = id;
         this.created_date = created_date;
         this.updated_date = updated_date;
         this.created_by = created_by;
-        this.is_sample = is_sample;
 
         this.title = title;
         this.description = description;
@@ -47,17 +42,57 @@ export class Lesson {
     static getAllLessons() {
         return lessonsData.lessons.map(data => new Lesson(data));
     }
+
+    static async delete(lessonId) {
+        const response = await fetch(`/api/lessons/${lessonId}`, {
+            method: 'DELETE',
+        });
+    
+        if (!response.ok) {
+            throw new Error(`Failed to delete lesson with ID ${lessonId}`);
+        }
+    }
+    
 }
 
 
 export class Exam {
-  static list() {
-    return Promise.resolve(examsData.exams);
+    static async list() {
+      const response = await fetch('/api/exams');
+        if (!response.ok) throw new Error('Failed to fetch exams');
+        return await response.json();
+    }
+  
+    static async create(newExam) {
+      const response = await fetch('/api/exams', {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify(newExam),
+      });
+      if (!response.ok) throw new Error('Failed to create exam');
+      return response.json();
+    }
+  
+    static async update(id, updatedExam) {
+      const response = await fetch(`/api/exams/${id}`, {
+         method: 'PUT',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify(updatedExam),
+      });
+      if (!response.ok) throw new Error('Failed to update exam');
+      return response.json();
+    }
+  
+    static async delete(id) {
+      const response = await fetch(`/api/exams/${id}`, {
+         method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Failed to delete exam');
+      return response.json();
+    }
   }
-}
-
-
-export const ExamResult = {
+  
+  export const ExamResult = {
     exam_id: "",
     score: 0,
     answers: [],
@@ -66,102 +101,109 @@ export const ExamResult = {
     created_date: "",
     updated_date: "",
     created_by: "",
-    is_sample: false,
-  
+
+    // קריאה מה-API (GET)
     list: async () => {
-      const results = storage.get("examResults");
-      if (!results || !results.length) {
-        storage.set("examResults", examResultsData.examResults);
-        return examResultsData.examResults;
-      }
-      return results;
+        try {
+            const response = await fetch('/api/exam-results');
+            if (!response.ok) throw new Error('Failed to fetch exam results');
+            const results = await response.json();
+
+            // שמור רק את התוצאה האחרונה של כל מבחן עבור כל משתמש
+            const latestResults = results.reduce((acc, result) => {
+                const key = `${result.exam_id}_${result.created_by}`;
+                if (!acc[key] || new Date(result.created_date) > new Date(acc[key].created_date)) {
+                    acc[key] = result;
+                }
+                return acc;
+            }, {});
+
+            return Object.values(latestResults);
+        } catch (error) {
+            console.error('Failed to load exam results:', error);
+            return [];
+        }
+    },
+
+    // יצירה או עדכון של תוצאה (POST)
+    create: async (result) => {
+        try {
+            const response = await fetch('/api/exam-results', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(result)
+            });
+
+            if (!response.ok) throw new Error('Failed to save exam result');
+                return await response.json();
+        } catch (error) {
+            console.error('Failed to create exam result:', error);
+            return null;
+        }
+    },
+
+    // עדכון תוצאה קיימת
+    update: async (id, updatedFields) => {
+        try {
+            const result = await ExamResult.create({ id, ...updatedFields });
+            return result;
+        } catch (error) {
+            console.error('Failed to update exam result:', error);
+            return null;
+        }
+    },
+
+    // מחיקת תוצאה
+    remove: async (id) => {
+        try {
+            const response = await fetch(`/api/exam-results/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) throw new Error('Failed to delete exam result');
+        } catch (error) {
+            console.error('Failed to delete exam result:', error);
+        }
+    }
+};
+    
+export const RegisteredUser = {
+    list: async () => {
+      const response = await fetch('/api/registered-users');
+      return response.json();
     },
   
-    create: async (result) => {
-      const results = storage.get("examResults") || [];
-      results.push(result);
-      storage.set("examResults", results);
-      return result;
+    create: async (user) => {
+      const response = await fetch('/api/registered-users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+      });
+      return response.json();
     },
   
     update: async (id, updatedFields) => {
-      const results = storage.get("examResults") || [];
-      const index = results.findIndex((r) => r.id === id);
-      if (index !== -1) {
-        results[index] = { ...results[index], ...updatedFields, updated_date: new Date().toISOString() };
-        storage.set("examResults", results);
-        return results[index];
-      }
-      return null;
+      const response = await fetch(`/api/registered-users/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedFields)
+      });
+      return response.json();
     },
   
     remove: async (id) => {
-      let results = storage.get("examResults") || [];
-      results = results.filter((r) => r.id !== id);
-      storage.set("examResults", results);
+      await fetch(`/api/registered-users/${id}`, {
+        method: 'DELETE'
+      });
+    },
+  
+    filter: async (criteria) => {
+      const users = await RegisteredUser.list();
+      return users.filter(user =>
+        Object.entries(criteria).every(([key, value]) => user[key] === value)
+      );
     },
   };
-    
-  export const RegisteredUser = {
-    email: "",
-    full_name: "",
-    status: "",
-    request_date: "",
-    approval_date: "",
-    notes: "",
-    id: "",
-    created_date: "",
-    updated_date: "",
-    created_by: "",
-    is_sample: false,
-
-    list: async () => {
-        const users = storage.get("registeredUsers");
-        if (!users || !users.length) {
-            storage.set("registeredUsers", registeredUsersData.registeredUsers);
-            return registeredUsersData.registeredUsers;
-        }
-        return users;
-    },
-
-    create: async (user) => {
-        const users = storage.get("registeredUsers") || [];
-        const newUser = {
-            ...user,
-            id: generateId(), // ודא שיש לך פונקציה כזו ליצירת מזהה ייחודי
-            created_date: new Date().toISOString(),
-            updated_date: new Date().toISOString(),
-            is_sample: false
-        };
-        users.push(newUser);
-        storage.set("registeredUsers", users);
-        return newUser;
-    },
-
-    update: async (id, updatedFields) => {
-        const users = storage.get("registeredUsers") || [];
-        const index = users.findIndex((u) => u.id === id);
-        if (index !== -1) {
-            users[index] = { ...users[index], ...updatedFields, updated_date: new Date().toISOString() };
-            storage.set("registeredUsers", users);
-            return users[index];
-        }
-        return null;
-    },
-
-    remove: async (id) => {
-        let users = storage.get("registeredUsers") || [];
-        users = users.filter((u) => u.id !== id);
-        storage.set("registeredUsers", users);
-    },
-
-    filter: async (criteria) => {
-        const users = await RegisteredUser.list(); // קבל את כל המשתמשים
-        return users.filter((user) =>
-          Object.entries(criteria).every(([key, value]) => user[key] === value)
-        );
-      },      
-};
 
 export const CourseContent = {
     title: "",
@@ -172,7 +214,6 @@ export const CourseContent = {
     created_date: "",
     updated_date: "",
     created_by: "",
-    is_sample: false,
 
     list: async () => {
         const content = storage.get("courseContent");
@@ -225,8 +266,5 @@ export const CourseContent = {
     }
 };
 
-
-// auth sdk:
-//export const User = base44.auth;
 
 export { User };

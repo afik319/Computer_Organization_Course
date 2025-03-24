@@ -7,19 +7,17 @@ const router = express.Router();
 
 // הגדרת S3Client עם Transfer Acceleration אם מופעל
 const s3 = new S3Client({
-  region: process.env.AWS_REGION,
+  region: process.env.VITE_AWS_REGION,
   credentials: fromEnv(),
   useAccelerateEndpoint: true,
 });
 
-// Endpoint לקבלת Presigned URL לסרטון
-// המשתמש שולח בקשה GET לכתובת: /api/get-video-link?fileName=שם_קובץ.mp4
 router.get('/get-video-link', async (req, res) => {
   try {
     const videoKey = req.query.fileName || 'pipeline-part-c-cycles45.mp4';
 
     const command = new GetObjectCommand({
-      Bucket: process.env.AWS_BUCKET_NAME,
+      Bucket: process.env.VITE_AWS_BUCKET_NAME,
       Key: videoKey,
     });
 

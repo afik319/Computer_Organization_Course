@@ -52,7 +52,6 @@ export default function Dashboard() {
       
       const user = await User.me();
       setCurrentUser(user);
-      console.log("Current user:", user);
 
       if (user && user.email && user.email !== SUPER_ADMIN_EMAIL) {
         const allUsers = await RegisteredUser.filter({ status: "approved" }); //filter by mail not possible
@@ -192,8 +191,7 @@ export default function Dashboard() {
             description: contentData.description || "תיאור ברירת מחדל",
             last_updated: new Date().toISOString(),
             updated_by: currentUser?.email || "system",
-            created_by: currentUser?.email || "system",
-            is_sample: false
+            created_by: currentUser?.email || "system"
         });
         setCourseContent(newContent);
       }

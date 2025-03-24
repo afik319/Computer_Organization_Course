@@ -77,18 +77,12 @@ export default function UserManagementPage() {
       const user = await User.me();
       
       if (!user || user.email !== SUPER_ADMIN_EMAIL) {
-        console.log("User not authorized to access UserManagement");
-        toast({
-          title: "אין גישה",
-          description: "רק מנהל מערכת יכול לצפות בעמוד זה",
-          variant: "destructive",
-        });
         navigate(createPageUrl("Dashboard"));
         return false;
       }
-      
       return true;
-    } catch (error) {
+    } 
+    catch (error) {
       console.error("Error checking permission:", error);
       navigate(createPageUrl("Dashboard"));
       return false;
@@ -96,9 +90,8 @@ export default function UserManagementPage() {
   }, [navigate]);
   
   const loadData = useCallback(async () => {
-    if (!(await checkUserPermissions())) {
+    if (!(await checkUserPermissions())) 
       return;
-    }
     
     setIsLoading(true);
     try {
@@ -136,7 +129,8 @@ export default function UserManagementPage() {
       
       setUsers(uniqueRegisteredUsers);
       
-    } catch (error) {
+    } 
+    catch (error) {
       console.error("Error loading data:", error);
       toast({
         title: "שגיאה בטעינת נתונים",
@@ -155,10 +149,6 @@ export default function UserManagementPage() {
 
   const handleRefreshData = () => {
     loadData();
-    toast({
-      title: "הנתונים עודכנו",
-      description: "רשימת המשתמשים עודכנה בהצלחה",
-    });
   };
 
   const handleDeleteUser = async (userId, email) => {

@@ -24,9 +24,7 @@ export default function LessonsPage() {
 
   const loadLessons = async () => {
     try {
-      console.log("Fetching lessons...");
       const fetchedLessons = Lesson.getAllLessons();
-      console.log("Fetched lessons:", fetchedLessons);
       
       try {
         const uniqueTopics = [...new Set(fetchedLessons.map(lesson => lesson.topic))];
@@ -82,13 +80,6 @@ export default function LessonsPage() {
         console.error("Error processing topics:", error);
       }
       
-      console.log("Before sorting - orders:", fetchedLessons.map(l => ({ 
-        title: l.title, 
-        topic: l.topic, 
-        order: l.order, 
-        orderType: typeof l.order 
-      })));
-      
       const sortedLessons = [...fetchedLessons].sort((a, b) => {
         if (a.topic !== b.topic) {
           return a.topic.localeCompare(b.topic);
@@ -96,15 +87,8 @@ export default function LessonsPage() {
         const orderA = Number(a.order) || 0;
         const orderB = Number(b.order) || 0;
         
-        console.log(`Comparing orders: ${a.title} (${orderA}) vs ${b.title} (${orderB})`);
         return orderA - orderB;
       });
-      
-      console.log("After sorting - orders:", sortedLessons.map(l => ({ 
-        title: l.title, 
-        topic: l.topic, 
-        order: l.order 
-      })));
       
       setLessons(sortedLessons);
       
@@ -203,16 +187,13 @@ export default function LessonsPage() {
     try {
       await Lesson.delete(lessonId);
       
-      toast({
-        title: "שיעור נמחק",
-        description: "השיעור נמחק בהצלחה",
-      });
+      alert("השיעור נמחק בהצלחה");
       
       await loadLessons();
       
       setSelectedLesson(null);
     } catch (error) {
-      console.error("Error deleting lesson:", error);
+      alert("Error deleting lesson:", error);
       toast({
         title: "שגיאה",
         description: "אירעה שגיאה במחיקת השיעור",

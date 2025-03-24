@@ -1,3 +1,4 @@
+import React from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Pencil, CheckCircle2, Trash2 } from "lucide-react";
@@ -6,21 +7,20 @@ import { cn } from "@/lib/utils";
 
 // פונקציה לתיקון תצוגת שמות הנושאים - מחליפה קו תחתון ברווח
 const formatTopicName = (topicName) => {
-  if (!topicName) return "";
-  return topicName.replace(/_/g, ' ');
+  const safeTopicName = String(topicName || "").trim(); // המרה למחרוזת והסרת רווחים
+  return safeTopicName.replace(/_/g, ' ');
 };
 
+// מיפוי קבוע של נושאים
 const TOPICS_MAP = {
-  "topic_1": "הקדמה",
-  "topic_2": "שיטות לייצוג מספרים",
-  "topic_3": "מערכים והקצאת מקום בזיכרון",
-  "topic_4": "מעגלים לוגיים",
-  "topic_5": "חישוב זמן עיבוד",
-  "topic_6": "הקדמה לרגיסטרים",
-  "topic_7": "סוגי פקודות שונים",
-  "topic_8": "המעבד החד מחזורי",
-  "topic_9": "המעבד בתצורת צנרת",
-  "topic_10": "זיכרון המטמון"
+  "processor_architecture": "ארכיטקטורת מעבדים",
+  "memory_systems": "מערכות זיכרון",
+  "instruction_sets": "סט הוראות",
+  "pipelining": "שיטות צנרת",
+  "cache": "זיכרון מטמון",
+  "io_systems": "מערכות קלט/פלט",
+  "assembly_language": "שפת סף",
+  "performance_optimization": "אופטימיזציית ביצועים"
 };
 
 export default function ExamList({ exams, results, onSelect, selectedExam, onEdit, onDelete, onTakeExam, currentUserEmail }) {
@@ -38,9 +38,8 @@ export default function ExamList({ exams, results, onSelect, selectedExam, onEdi
     }
   });
 
-  const topics = Object.keys(TOPICS_MAP).filter(topic => 
-    safeExams.some(exam => exam.topic === topic)
-  );
+  // יצירת רשימה של נושאים ייחודיים
+  const topics = Array.from(new Set(safeExams.map(exam => exam.topic)));
 
   if (safeExams.length === 0) {
     return (

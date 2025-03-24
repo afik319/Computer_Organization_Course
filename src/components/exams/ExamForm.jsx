@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Plus, X, Trash2, Upload, Loader2, Edit2 } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
-import { UploadFile } from "@/api/integrations";
+import { getUploadUrl } from "@/api/upload";
 import {
   Dialog,
   DialogContent,
@@ -37,44 +37,23 @@ export default function ExamForm({ exam, onSave, onCancel }) {
   const [uploading, setUploading] = useState([]);
 
   useEffect(() => {
-    const savedTopics = localStorage.getItem('examTopics');
-    if (savedTopics) {
+    const loadTopics = async () => {
       try {
-        setAvailableTopics(JSON.parse(savedTopics));
-      } catch (error) {
-        console.error("Error loading saved topics:", error);
-        const defaultTopics = [
-          { id: "topic_1", label: "הקדמה" },
-          { id: "topic_2", label: "שיטות לייצוג מספרים" },
-          { id: "topic_3", label: "מערכים והקצאת מקום בזיכרון" },
-          { id: "topic_4", label: "מעגלים לוגיים" },
-          { id: "topic_5", label: "חישוב זמן עיבוד" },
-          { id: "topic_6", label: "הקדמה לרגיסטרים" },
-          { id: "topic_7", label: "סוגי פקודות שונים" },
-          { id: "topic_8", label: "המעבד החד מחזורי" },
-          { id: "topic_9", label: "המעבד בתצורת צנרת" },
-          { id: "topic_10", label: "זיכרון המטמון" }
-        ];        
-        setAvailableTopics(defaultTopics);
-        localStorage.setItem('examTopics', JSON.stringify(defaultTopics));
+        const response = await fetch('/api/topics');
+      if (!response.ok) {
+        throw new Error(`Failed to fetch topics from JSON: ${response.statusText}`);
       }
-    } else {
-      const defaultTopics = [
-        { id: "topic_1", label: "הקדמה" },
-        { id: "topic_2", label: "שיטות לייצוג מספרים" },
-        { id: "topic_3", label: "מערכים והקצאת מקום בזיכרון" },
-        { id: "topic_4", label: "מעגלים לוגיים" },
-        { id: "topic_5", label: "חישוב זמן עיבוד" },
-        { id: "topic_6", label: "הקדמה לרגיסטרים" },
-        { id: "topic_7", label: "סוגי פקודות שונים" },
-        { id: "topic_8", label: "המעבד החד מחזורי" },
-        { id: "topic_9", label: "המעבד בתצורת צנרת" },
-        { id: "topic_10", label: "זיכרון המטמון" }
-      ];      
-      setAvailableTopics(defaultTopics);
-      localStorage.setItem('examTopics', JSON.stringify(defaultTopics));
-    }
+      const data = await response.json();
+      setAvailableTopics(data);
+      } catch (error) {
+        console.error("Error loading topics:", error);
+        //setAvailableTopics(defaultTopics); // במקרה של כשל, טוען את ברירת המחדל
+      }
+    };    
+  
+    loadTopics();
   }, []);
+  
 
   useEffect(() => {
     if (availableTopics.length > 0) {
@@ -82,22 +61,60 @@ export default function ExamForm({ exam, onSave, onCancel }) {
     }
   }, [availableTopics]);
 
-  const addCustomTopic = () => {
+  const addCustomTopic = async () => {
     if (!newTopicLabel) return;
-    
-    const newTopicId = newTopicLabel.toLowerCase().replace(/\s+/g, '_');
-    
-    setAvailableTopics(prev => [...prev, { id: newTopicId, label: newTopicLabel }]);
-    setNewTopicLabel("");
-    setShowTopicDialog(false);
-  };
+  
+    try {
+      // שולחים בקשת POST לשרת (topicRoutes.js)
+      const response = await fetch('/api/topics', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ label: newTopicLabel })
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Failed to add topic: ${response.statusText}`);
+      }
+      
+      // מקבלים את האובייקט החדש שהשרת מחזיר
+      const newTopic = await response.json();
+  
+      // מעדכנים את state ברשימת הנושאים
+      setAvailableTopics(prev => [...prev, newTopic]);
+  
+      // איפוס השדה וסגירת הדיאלוג
+      setNewTopicLabel("");
+      setShowTopicDialog(false);
+  
+    } catch (error) {
+      console.error("Error adding new topic:", error);
+    }
+  };  
 
-  const removeTopic = (topicId) => {
-    setAvailableTopics(prev => prev.filter(topic => topic.id !== topicId));
-    if (formData.topic === topicId) {
-      setFormData(prev => ({ ...prev, topic: "" }));
+  const removeTopic = async (topicId) => {
+    try {
+      const response = await fetch(`/api/topics/${topicId}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to delete topic: ${response.statusText}`);
+      }
+  
+      // מוחקים מ־state המקומי
+      setAvailableTopics(prev => prev.filter((topic) => topic.id !== topicId));
+  
+      // אם הנושא שנמחק הוא זה שהיה נבחר בפורם - ננקה אותו
+      if (formData.topic === topicId) {
+        setFormData(prev => ({ ...prev, topic: "" }));
+      }
+      
+    } catch (error) {
+      console.error("Error deleting topic:", error);
     }
   };
+  
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -170,17 +187,31 @@ export default function ExamForm({ exam, onSave, onCancel }) {
   const handleImageUpload = async (event, questionIndex) => {
     const file = event.target.files[0];
     if (!file) return;
-
+  
     setUploading(prev => [...prev, questionIndex]);
-    
+  
     try {
       console.log(`Starting image upload for question ${questionIndex}. Size: ${file.size} bytes, Name: ${file.name}`);
-      
-      const { file_url } = await UploadFile({ file });
-      console.log(`Upload completed successfully. URL: ${file_url}`);
-      
-      handleQuestionChange(questionIndex, 'image_url', file_url);
-      
+  
+      const { url, key } = await getUploadUrl(file.name, file.type);
+  
+      await fetch(url, {
+        method: 'PUT',
+        body: file,
+        headers: {
+          'Content-Type': file.type
+        }
+      });
+  
+      console.log(`Upload completed successfully. Key: ${key}`);
+  
+      const response = await fetch(`/api/get-file-url?fileName=${key}`);
+      if (!response.ok) throw new Error(`Failed to get file URL: ${response.statusText}`);
+          
+      const { url: fileUrl } = await response.json();
+
+      handleQuestionChange(questionIndex, 'image_url', fileUrl);
+  
       toast({
         title: "התמונה הועלתה בהצלחה",
         description: "התמונה הועלתה לשאלה בהצלחה",
@@ -195,7 +226,8 @@ export default function ExamForm({ exam, onSave, onCancel }) {
     } finally {
       setUploading(prev => prev.filter(idx => idx !== questionIndex));
     }
-  };
+  };  
+  
 
   const validateForm = () => {
     if (!formData.title.trim()) {
@@ -366,7 +398,7 @@ export default function ExamForm({ exam, onSave, onCancel }) {
                 </SelectTrigger>
                 <SelectContent align="end" className="text-right" dir="rtl">
                   {availableTopics.map(topic => (
-                    <SelectItem key={topic.id} value={topic.id} className="text-right" dir="rtl">
+                    <SelectItem key={topic.label} value={topic.label} className="text-right" dir="rtl">
                       {topic.label}
                     </SelectItem>
                   ))}

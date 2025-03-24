@@ -58,8 +58,7 @@
       "id": "67db272fee2528e16d15db6c",
       "created_date": "2025-03-19T20:21:03.683000",
       "updated_date": "2025-03-19T21:28:09.944000",
-      "created_by": "afik.ratzon@gmail.com",
-      "is_sample": false
+      "created_by": "afik.ratzon@gmail.com"
     },
     {
       "title": "מעגלים לוגיים ופונקציות בוליאניות",
@@ -68,7 +67,7 @@
       "questions": [
         {
           "question": "איזה פונקציה בין X  ל Y מממש המעגל הלוגי הבא?",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/13d44d_1.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-2-question-1.png",
           "options": [
             "AND",
             "XOR",
@@ -115,7 +114,7 @@
         },
         {
           "question": "איזה פונקציה F בין X  ל Y מממש המעגל הלוגי הבא",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/c1ab88_2.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-2-question-5.png",
           "options": [
             "OR",
             "AND",
@@ -143,8 +142,7 @@
       "id": "67db2b4cecceb6041dd43ab4",
       "created_date": "2025-03-19T20:38:36.547000",
       "updated_date": "2025-03-19T21:27:31.310000",
-      "created_by": "afik.ratzon@gmail.com",
-      "is_sample": false
+      "created_by": "afik.ratzon@gmail.com"
     },
     {
       "title": "שאלות הרצה באסמבלי",
@@ -153,7 +151,7 @@
       "questions": [
         {
           "question": "על סמך הנתונים, מה יהיה זמן ריצת הלולאה?\n",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/d93014_8.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-3-question-1.png",
           "options": [
             "0x00400400",
             "0x00400454",
@@ -165,7 +163,7 @@
         },
         {
           "question": "נתון מעבד MIPS העובד בתדר של 2Ghz עם זיכרון מטמון במיפוי ישיר.\n\nנתון כי 2% מהפקודות מוחטאות, וכן 4% מהנתונים מוחטאים. מחצית מהפקודות מבצעות גישה לנתונים, וזמן ההחטאה miss penalty הוא 10 מחזורי שעון (לפקודות ולנתונים) הניחו כי ללא החטאות של זיכרון המטמון , ה- CPI הממוצע של המעבד הוא 1.6 (cc/ins) \nמה יהיה זמן הריצה של תכנית עם 10 בחזקת 9 פקודות בנתוני שאלה זו:",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/e8f36c_81.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-3-question-2.png",
           "options": [
             "0xB83ffff8",
             "0xB83ffffc",
@@ -178,7 +176,7 @@
         },
         {
           "question": "נתון מעבד מסוים עם מימוש של אוסף פקודות. הפקודות מתלקות ל 4 סוגים: X, Y, Z, W\nזמן המחזור של מעבד זה הוא 0.75ns  . (תזכורת ns = 10^-9 sec)\nה - CPI של כל סוג פקודות הוא:\nX:2 , Y:3 , Z:1 , W:4\nנתונה תוכנית עם 8^10  פקודות המחולקות לסוגים הנ״ל לפי השכיחויות הבאות:\nX - 30%, Y - 40%, Z - 20%, W - 10%\n\nכמה זמן יקח למעבד לבצע את התכנית?",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/60e57a_1.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-3-question-3.png",
           "options": [
             "0xfffffffe",
             "0xfffffffc",
@@ -202,7 +200,7 @@
         },
         {
           "question": "נתון כי בתחילת הקוד ערך האוגר t5 הוא 5, וערך האוגר s3 הוא 0, מה יהיה ערכו של האוגר s3 בבסיס 16, לאחר סיום ביצוע קטע הקוד הבא:\n\n",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/31fb3a_11.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-3-question-5.png",
           "options": [
             "0",
             "0xc",
@@ -226,7 +224,7 @@
         },
         {
           "question": "בסיום הפקודה בשורה 9, מה ערכו של האוגר t1 בבסיס 16?",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/507346_12.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-3-question-7.png",
           "options": [
             "0x00001C66",
             "0x0000004f",
@@ -238,7 +236,7 @@
         },
         {
           "question": "על סמן הפסיאודו פקודה בשורה 10 (bne $t0, 17, STOP) ושאר הנתונים של סגמנט הקוד.\nמהי כתובת התווית Cont בבסיס 16?",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6c8828_121.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-3-question-8.png",
           "options": [
             "0x00400040",
             "0x004000E4",
@@ -250,7 +248,7 @@
         },
         {
           "question": "בסיום הפקודה בשורה 3 מה יהיה ערכו של האוגר s1 בבסיס הקסא?",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/0104af_13.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-3-question-9.png",
           "options": [
             "0x00000ff",
             "0x00000089",
@@ -262,7 +260,7 @@
         },
         {
           "question": "על סמך הפסיאודו פקודה בשורה 4 ושאר הנתונים של סגמנט הקוד\nמהי כתובתו של התווית  Go ",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/f5d46e_131.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-3-question-10.png",
           "options": [
             "0x32310088",
             "0x3231008a",
@@ -274,7 +272,7 @@
         },
         {
           "question": "ערכם ההתחלתי של s4 = 2, t3 = 10 . מה יהיה ערכו של האוגר s4 בסיום ביצוע קטע הקוד הבא:",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/09dec2_14.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-3-question-11.png",
           "options": [
             "0",
             "2",
@@ -286,7 +284,7 @@
         },
         {
           "question": "באסמבלי המורחב של המעבד MIPS פסיאודו הפקודה\n la $a0, STEP טוענת את הכתובת של התווית STEP לאוגר a0 . נרצה לממש את הפקודה jal func בעזרת קוד חלופי המשתמש בפסיאודו פקודה זו.\n\nאיזה קטע קוד מממש את הפקודה jal func ?",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/448175_15.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-3-question-12.png",
           "options": [
             "א",
             "ב",
@@ -298,7 +296,7 @@
         },
         {
           "question": "מה ניתן להגיד על הפקודה בשורה 21 בקובץ המקור ?\n\n",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/f13a62_16.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-3-question-13.png",
           "options": [
             "זוהי כמובן פסיאודו פקודה, ניתן לדעת שלא תתבצע קפיצה לתווית Afik",
             "זוהי כמובן פסיאודו פקודה, ניתן לדעת שתתבצע קפיצה לתווית Afik",
@@ -309,7 +307,7 @@
         },
         {
           "question": "על סמך הנתונים בתמונת סגמנט הקוד, מה כתובת התווית Afik?",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/dcd654_161.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-3-question-14.png",
           "options": [
             "0x00400044",
             "0x00400024",
@@ -321,7 +319,7 @@
         },
         {
           "question": "בסיום הפקודה בשורה 3 , מה ערכן של האוגר t1 בבסיס הקסא?",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/22747b_17.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-3-question-15.png",
           "options": [
             "0x00097573",
             "0x0025d5cc",
@@ -333,7 +331,7 @@
         },
         {
           "question": "על סמך הנתונים בתמונת סגמנט הקוד, מה כתובת התווית Hello?",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/c65d85_171.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-3-question-16.png",
           "options": [
             "0x11200000",
             "0x11200004",
@@ -345,7 +343,7 @@
         },
         {
           "question": "באסמבלי המורחב של המעבד MIPS פסיאודו הפקודה \nla $a0, STEP טוענת את הכתובת של התווית STEP לאוגר a0 . נרצה לממש את הפקודה jal func בעזרת קוד חלופי המשתמש בפסיאודו פקודה זו.\n\nאיזה קטע קוד מממש את הפקודה jal func ?",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/04f96f_19.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-3-question-17.png",
           "options": [
             "א",
             "ב",
@@ -369,7 +367,7 @@
         },
         {
           "question": "הקוד הבא רץ על הצנרת המתוארת בתרשים 4.66 בספר. ניתן להניח שה Branch taken בפקודה I1  ומתקיימת קפיצה ל label.\n\nפקודה I3 היא פגודה לא מוגדרת .\n\nהפקודה  sw $26, 1000($0) היא הפקודה הראשונה של התכנית המטפלת בחריגה.\n\nבהנחה שלאחר המעבר ל Exception Handler לא חוזרים יותר לקוד זה, מבין הפקודות I1-I5 אילו פקודות מתבצעות עד סופן? (הכוונה שהפקודה עוברת את כל השלבים עד לשלב החמישי שלב ה WB)",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/94d168_20.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-3-question-19.png",
           "options": [
             "L1 L2",
             "L1  L2  L3",
@@ -396,8 +394,7 @@
       "id": "67db35d81923598fa20bc87d",
       "created_date": "2025-03-19T21:23:36.256000",
       "updated_date": "2025-03-19T21:30:43.631000",
-      "created_by": "afik.ratzon@gmail.com",
-      "is_sample": false
+      "created_by": "afik.ratzon@gmail.com"
     },
     {
       "title": "שיטות העבודה במעבד",
@@ -540,13 +537,12 @@
       "id": "67db391a1923598fa20bde3b",
       "created_date": "2025-03-19T21:37:30.082000",
       "updated_date": "2025-03-19T21:37:57.474000",
-      "created_by": "afik.ratzon@gmail.com",
-      "is_sample": false
+      "created_by": "afik.ratzon@gmail.com"
     },
     {
       "title": "סיכון נתונים",
       "description": "",
-      "topic": "סיכון_נתונים",
+      "topic": "סיכון נתונים",
       "questions": [
         {
           "question": "בתחתית עמוד 320 בספר הלימוד בתנאים של Ex.hazad מופיעה פעמיים השורה:  And (Ex/Mem.RegisterRd != 0) \nאם נוריד את ההופעות של שורה זו מהתנאים של Ex.hazad מה עלול להתבצע?",
@@ -562,7 +558,7 @@
         },
         {
           "question": "בתרשים 4.60 בספר הלימוד מופיע קו בשם IF/ID Write היוצא מיחידת ה HDU. מהו תפקידו?",
-          "image_url": "",
+          "image_url": "https://afik-app-uploads-public.s3.us-east-1.amazonaws.com/033eca_6.png",
           "options": [
             "לעכב פקודות lw בזיהוי סיכון נתונים של load use",
             "תפקידו לבצע איפוס של הסיביות באוגר הצנרת IF/ID ובכך ליצור בועה בעקבות סיכון בקרה בצנרת.",
@@ -576,18 +572,17 @@
       "passing_score": 100,
       "id": "67db39bbf0537a05df33a5ce",
       "created_date": "2025-03-19T21:40:11.187000",
-      "updated_date": "2025-03-19T21:40:11.187000",
-      "created_by": "afik.ratzon@gmail.com",
-      "is_sample": false
+      "updated_date": "2025-03-23T19:19:09.021Z",
+      "created_by": "afik.ratzon@gmail.com"
     },
     {
       "title": "ביצועי המעבד",
       "description": "",
-      "topic": "ביצועי_המעבד",
+      "topic": "ביצועי המעבד",
       "questions": [
         {
           "question": "על סמך הנתונים, מה יהיה זמן ריצת הלולאה?\n",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/14bcdd_3.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-6-question-1.png",
           "options": [
             "23 שניות",
             "46 שניות",
@@ -648,7 +643,7 @@
         },
         {
           "question": "בהתבסס על הנתונים ובהנחה שאלו הפקודות היחידות בתכנית ושאין השהיות. מהו זמן הריצה הכולל של התוכנית?",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/dec2e1_4.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-6-question-6.png",
           "options": [
             "0.001333 שניות",
             "0.0122 שניות",
@@ -672,7 +667,7 @@
         },
         {
           "question": "נתון מעבד עם ארבעה סוגי פקודות: X, Y, Z, W וקצב שעון  4.2Ghz\n\nפקודות מקבוצה X מופיעות ב 10% מהמקרים, וה - CPI הממוצע שלהן הוא 1.\n\nפקודות מקבוצה Y מופיעות ב 40% מהמקרים, וה - CPI הממוצע שלהן הוא 6.\n\nפקודות מקבוצה Z מופיעות ב 20% מהמקרים, וה - CPI הממוצע שלהן הוא 4.\n\nפקודות מקבוצה W מופיעות ב 30% מהמקרים, וה - CPI הממוצע שלהן הוא 3.",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/25b18a_5.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-6-question-8.png",
           "options": [
             "א",
             "ב",
@@ -768,7 +763,7 @@
         },
         {
           "question": "בחרו באפשרות הנכונה",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/033eca_6.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-6-question-16.png",
           "options": [
             "0.05",
             "0.245",
@@ -781,7 +776,7 @@
         },
         {
           "question": "בחרו באפשרות הנכונה",
-          "image_url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/12469e_7.png",
+          "image_url": "https://afik-app-uploads-public.s3.amazonaws.com/uploads/exam-6-question-17.png",
           "options": [
             "א",
             "ב",
@@ -820,14 +815,13 @@
       "passing_score": 60,
       "id": "67db3e5c0115e009cf0e15f1",
       "created_date": "2025-03-19T21:59:56.262000",
-      "updated_date": "2025-03-19T22:01:12.350000",
-      "created_by": "afik.ratzon@gmail.com",
-      "is_sample": false
+      "updated_date": "2025-03-23T14:25:17.994Z",
+      "created_by": "afik.ratzon@gmail.com"
     },
     {
       "title": "זיכרון המטמון",
       "description": "",
-      "topic": "זיכרון_המטמון",
+      "topic": "זיכרון המטמון",
       "questions": [
         {
           "question": "נתון מעבד MIPS העובד בתדר של 2Ghz עם זיכרון מטמון במיפוי ישיר. 2% מהפקודות מוחטאות, וכן 4% מהנתונים מוחטאים. 50% מהפקודות מבצעות גישה לנתונים, וזמן ההחטאה miss penalty הוא 10 מחזורי שעון (לפקודות ולנתונים) ניתן להניח כי ללא החטאות של זיכרון המטמון , ה- CPI הממוצע של המעבד הוא 1.6 (cc/ins) מה יהיה זמן הריצה של תכנית עם 9^10 פקודות בנתוני שאלה זו:",
@@ -967,9 +961,8 @@
       "passing_score": 70,
       "id": "67db42445367830c8c16db2d",
       "created_date": "2025-03-19T22:16:36.751000",
-      "updated_date": "2025-03-19T22:16:36.751000",
-      "created_by": "afik.ratzon@gmail.com",
-      "is_sample": false
+      "updated_date": "2025-03-23T00:44:23.849Z",
+      "created_by": "afik.ratzon@gmail.com"
     }
   ],
   "examResults": [
@@ -984,8 +977,7 @@
       "id": "67d9970282cf23484edab0ed",
       "created_date": "2025-03-18T15:53:38.827000",
       "updated_date": "2025-03-18T15:53:38.827000",
-      "created_by": "myrwn25@gmail.com",
-      "is_sample": false
+      "created_by": "myrwn25@gmail.com"
     },
     {
       "exam_id": "67d95abab0e0603ece94a4d9",
@@ -998,8 +990,7 @@
       "id": "67d99d919b1ee776e1b2833e",
       "created_date": "2025-03-18T16:21:37.977000",
       "updated_date": "2025-03-18T16:21:37.977000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67d95abab0e0603ece94a4d9",
@@ -1012,8 +1003,7 @@
       "id": "67d99d98f5c98ee65a670263",
       "created_date": "2025-03-18T16:21:44.786000",
       "updated_date": "2025-03-18T16:21:44.786000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67d95abab0e0603ece94a4d9",
@@ -1026,8 +1016,7 @@
       "id": "67d99da265512fc49f16c3f7",
       "created_date": "2025-03-18T16:21:54.685000",
       "updated_date": "2025-03-18T16:21:54.685000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67d95abab0e0603ece94a4d9",
@@ -1040,8 +1029,7 @@
       "id": "67d99db382cf23484edad31b",
       "created_date": "2025-03-18T16:22:11.209000",
       "updated_date": "2025-03-18T16:22:11.209000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67d95abab0e0603ece94a4d9",
@@ -1054,8 +1042,7 @@
       "id": "67d99dc665512fc49f16c496",
       "created_date": "2025-03-18T16:22:30.447000",
       "updated_date": "2025-03-18T16:22:30.447000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67d95abab0e0603ece94a4d9",
@@ -1068,8 +1055,7 @@
       "id": "67d99dcb4b5032508c127f7e",
       "created_date": "2025-03-18T16:22:35.201000",
       "updated_date": "2025-03-18T16:22:35.201000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67d95abab0e0603ece94a4d9",
@@ -1082,8 +1068,7 @@
       "id": "67da03a605af2ec0e4a2229b",
       "created_date": "2025-03-18T23:37:10.161000",
       "updated_date": "2025-03-18T23:37:10.161000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67d95abab0e0603ece94a4d9",
@@ -1096,8 +1081,7 @@
       "id": "67da03b3f5c98ee65a68d149",
       "created_date": "2025-03-18T23:37:23.333000",
       "updated_date": "2025-03-18T23:37:23.333000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67da0fe905af2ec0e4a2498f",
@@ -1110,8 +1094,7 @@
       "id": "67da10f382cf23484edc3d1c",
       "created_date": "2025-03-19T00:33:55.345000",
       "updated_date": "2025-03-19T00:33:55.345000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67d95abab0e0603ece94a4d9",
@@ -1124,8 +1107,7 @@
       "id": "67da11c1967d7ee72b93378c",
       "created_date": "2025-03-19T00:37:21.160000",
       "updated_date": "2025-03-19T00:37:21.160000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67da0fe905af2ec0e4a2498f",
@@ -1138,8 +1120,7 @@
       "id": "67da11c89b1ee776e1b32aef",
       "created_date": "2025-03-19T00:37:28.878000",
       "updated_date": "2025-03-19T00:37:28.878000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67d95abab0e0603ece94a4d9",
@@ -1152,8 +1133,7 @@
       "id": "67da11e6f5c98ee65a68f95d",
       "created_date": "2025-03-19T00:37:58.143000",
       "updated_date": "2025-03-19T00:37:58.143000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67d95abab0e0603ece94a4d9",
@@ -1166,8 +1146,7 @@
       "id": "67da11fd82cf23484edc419e",
       "created_date": "2025-03-19T00:38:21.958000",
       "updated_date": "2025-03-19T00:38:21.958000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67d95abab0e0603ece94a4d9",
@@ -1180,8 +1159,7 @@
       "id": "67da120d82cf23484edc41d8",
       "created_date": "2025-03-19T00:38:37.232000",
       "updated_date": "2025-03-19T00:38:37.232000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67da0fe905af2ec0e4a2498f",
@@ -1194,8 +1172,7 @@
       "id": "67da12134b5032508c132a85",
       "created_date": "2025-03-19T00:38:43.589000",
       "updated_date": "2025-03-19T00:38:43.589000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67d95abab0e0603ece94a4d9",
@@ -1208,8 +1185,7 @@
       "id": "67da13e982cf23484edc4a95",
       "created_date": "2025-03-19T00:46:33.026000",
       "updated_date": "2025-03-19T00:46:33.026000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67d95abab0e0603ece94a4d9",
@@ -1222,8 +1198,7 @@
       "id": "67da13f9f5c98ee65a68fe73",
       "created_date": "2025-03-19T00:46:49.008000",
       "updated_date": "2025-03-19T00:46:49.008000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67d95abab0e0603ece94a4d9",
@@ -1236,8 +1211,7 @@
       "id": "67da155b9b1ee776e1b33236",
       "created_date": "2025-03-19T00:52:43.127000",
       "updated_date": "2025-03-19T00:52:43.127000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67d95abab0e0603ece94a4d9",
@@ -1250,8 +1224,7 @@
       "id": "67da163665512fc49f182f5a",
       "created_date": "2025-03-19T00:56:22.452000",
       "updated_date": "2025-03-19T00:56:22.452000",
-      "created_by": "gylysymyntyb@gmail.com",
-      "is_sample": false
+      "created_by": "gylysymyntyb@gmail.com"
     },
     {
       "exam_id": "67da0fe905af2ec0e4a2498f",
@@ -1264,8 +1237,7 @@
       "id": "67da166bf5c98ee65a6903fb",
       "created_date": "2025-03-19T00:57:15.656000",
       "updated_date": "2025-03-19T00:57:15.656000",
-      "created_by": "gylysymyntyb@gmail.com",
-      "is_sample": false
+      "created_by": "gylysymyntyb@gmail.com"
     },
     {
       "exam_id": "67d95abab0e0603ece94a4d9",
@@ -1278,8 +1250,7 @@
       "id": "67da19e705af2ec0e4a26d03",
       "created_date": "2025-03-19T01:12:07.336000",
       "updated_date": "2025-03-19T01:12:07.336000",
-      "created_by": "gylysymyntyb@gmail.com",
-      "is_sample": false
+      "created_by": "gylysymyntyb@gmail.com"
     },
     {
       "exam_id": "67d95abab0e0603ece94a4d9",
@@ -1292,8 +1263,7 @@
       "id": "67da19f382cf23484edc63a0",
       "created_date": "2025-03-19T01:12:19.647000",
       "updated_date": "2025-03-19T01:12:19.647000",
-      "created_by": "gylysymyntyb@gmail.com",
-      "is_sample": false
+      "created_by": "gylysymyntyb@gmail.com"
     },
     {
       "exam_id": "67da0fe905af2ec0e4a2498f",
@@ -1306,8 +1276,7 @@
       "id": "67da1a009b1ee776e1b338f9",
       "created_date": "2025-03-19T01:12:32.647000",
       "updated_date": "2025-03-19T01:12:32.647000",
-      "created_by": "gylysymyntyb@gmail.com",
-      "is_sample": false
+      "created_by": "gylysymyntyb@gmail.com"
     },
     {
       "exam_id": "67da1a54967d7ee72b933ce0",
@@ -1319,8 +1288,7 @@
       "id": "67da1a609b1ee776e1b339ba",
       "created_date": "2025-03-19T01:14:08.905000",
       "updated_date": "2025-03-19T01:14:08.905000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67da0fe905af2ec0e4a2498f",
@@ -1333,8 +1301,7 @@
       "id": "67da1a6905af2ec0e4a26f42",
       "created_date": "2025-03-19T01:14:17.538000",
       "updated_date": "2025-03-19T01:14:17.538000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67da1b8182cf23484edc6a71",
@@ -1346,8 +1313,7 @@
       "id": "67daad68967d7ee72b93be8f",
       "created_date": "2025-03-19T11:41:28.222000",
       "updated_date": "2025-03-19T11:41:28.222000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67da0fe905af2ec0e4a2498f",
@@ -1360,8 +1326,7 @@
       "id": "67daad809b1ee776e1b456eb",
       "created_date": "2025-03-19T11:41:52.029000",
       "updated_date": "2025-03-19T11:41:52.029000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db0f380115e009cf0dbc95",
@@ -1374,8 +1339,7 @@
       "id": "67db0f560115e009cf0dbcf9",
       "created_date": "2025-03-19T18:39:18.921000",
       "updated_date": "2025-03-19T18:39:18.921000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db0f380115e009cf0dbc95",
@@ -1388,8 +1352,7 @@
       "id": "67db0f582c66cf2953107848",
       "created_date": "2025-03-19T18:39:20.436000",
       "updated_date": "2025-03-19T18:39:20.436000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db0f380115e009cf0dbc95",
@@ -1402,8 +1365,7 @@
       "id": "67db0f6ef566fba95d968536",
       "created_date": "2025-03-19T18:39:42.271000",
       "updated_date": "2025-03-19T18:39:42.271000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db0f380115e009cf0dbc95",
@@ -1416,8 +1378,7 @@
       "id": "67db0f6f2c66cf2953107913",
       "created_date": "2025-03-19T18:39:43.403000",
       "updated_date": "2025-03-19T18:39:43.403000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db0f380115e009cf0dbc95",
@@ -1430,8 +1391,7 @@
       "id": "67db0f8ef566fba95d96854a",
       "created_date": "2025-03-19T18:40:14.383000",
       "updated_date": "2025-03-19T18:40:14.383000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db0f380115e009cf0dbc95",
@@ -1444,8 +1404,7 @@
       "id": "67db0f8f15035b694c40d314",
       "created_date": "2025-03-19T18:40:15.310000",
       "updated_date": "2025-03-19T18:40:15.310000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db0f380115e009cf0dbc95",
@@ -1458,8 +1417,7 @@
       "id": "67db0fa215035b694c40d3a5",
       "created_date": "2025-03-19T18:40:34.362000",
       "updated_date": "2025-03-19T18:40:34.362000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db0f380115e009cf0dbc95",
@@ -1472,8 +1430,7 @@
       "id": "67db0fa3e8df07753c0b96b3",
       "created_date": "2025-03-19T18:40:35.215000",
       "updated_date": "2025-03-19T18:40:35.215000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db0f380115e009cf0dbc95",
@@ -1486,8 +1443,7 @@
       "id": "67db115f2c66cf2953113a2d",
       "created_date": "2025-03-19T18:47:59.695000",
       "updated_date": "2025-03-19T18:47:59.695000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db0f380115e009cf0dbc95",
@@ -1500,8 +1456,7 @@
       "id": "67db11602c66cf2953113b45",
       "created_date": "2025-03-19T18:48:00.829000",
       "updated_date": "2025-03-19T18:48:00.829000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db13d20115e009cf0dd3e1",
@@ -1513,8 +1468,7 @@
       "id": "67db13ebf6eb4daa4efa1808",
       "created_date": "2025-03-19T18:58:51.740000",
       "updated_date": "2025-03-19T18:58:51.740000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db13d20115e009cf0dd3e1",
@@ -1526,8 +1480,7 @@
       "id": "67db13ec0115e009cf0dd4a6",
       "created_date": "2025-03-19T18:58:52.371000",
       "updated_date": "2025-03-19T18:58:52.371000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db0f380115e009cf0dbc95",
@@ -1541,8 +1494,7 @@
       "id": "67db153d0115e009cf0dd8ee",
       "created_date": "2025-03-19T19:04:29.163000",
       "updated_date": "2025-03-19T19:04:29.163000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db152741cb2a3359b7a350",
@@ -1555,8 +1507,7 @@
       "id": "67db154decceb6041dd40559",
       "created_date": "2025-03-19T19:04:45.965000",
       "updated_date": "2025-03-19T19:04:45.965000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db272fee2528e16d15db6c",
@@ -1571,8 +1522,7 @@
       "id": "67db2bbdecceb6041dd43c02",
       "created_date": "2025-03-19T20:40:29.763000",
       "updated_date": "2025-03-19T20:40:29.763000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db39bbf0537a05df33a5ce",
@@ -1585,8 +1535,7 @@
       "id": "67db44182c66cf295313b08b",
       "created_date": "2025-03-19T22:24:24.512000",
       "updated_date": "2025-03-19T22:24:24.512000",
-      "created_by": "shirra0208@gmail.com",
-      "is_sample": false
+      "created_by": "shirra0208@gmail.com"
     },
     {
       "exam_id": "67db39bbf0537a05df33a5ce",
@@ -1599,8 +1548,7 @@
       "id": "67db441d2c66cf295313b0a0",
       "created_date": "2025-03-19T22:24:29.749000",
       "updated_date": "2025-03-19T22:24:29.749000",
-      "created_by": "shirra0208@gmail.com",
-      "is_sample": false
+      "created_by": "shirra0208@gmail.com"
     },
     {
       "exam_id": "67db39bbf0537a05df33a5ce",
@@ -1613,8 +1561,7 @@
       "id": "67db44295367830c8c16e320",
       "created_date": "2025-03-19T22:24:41.192000",
       "updated_date": "2025-03-19T22:24:41.192000",
-      "created_by": "shirra0208@gmail.com",
-      "is_sample": false
+      "created_by": "shirra0208@gmail.com"
     },
     {
       "exam_id": "67db39bbf0537a05df33a5ce",
@@ -1627,8 +1574,7 @@
       "id": "67db442af0537a05df33dc48",
       "created_date": "2025-03-19T22:24:42.892000",
       "updated_date": "2025-03-19T22:24:42.892000",
-      "created_by": "shirra0208@gmail.com",
-      "is_sample": false
+      "created_by": "shirra0208@gmail.com"
     },
     {
       "exam_id": "67db39bbf0537a05df33a5ce",
@@ -1641,8 +1587,7 @@
       "id": "67db44340115e009cf0e2f4b",
       "created_date": "2025-03-19T22:24:52.872000",
       "updated_date": "2025-03-19T22:24:52.872000",
-      "created_by": "shirra0208@gmail.com",
-      "is_sample": false
+      "created_by": "shirra0208@gmail.com"
     },
     {
       "exam_id": "67db3e5c0115e009cf0e15f1",
@@ -1672,8 +1617,7 @@
       "id": "67db462b5367830c8c16e952",
       "created_date": "2025-03-19T22:33:15.791000",
       "updated_date": "2025-03-19T22:33:15.791000",
-      "created_by": "gylysymyntyb@gmail.com",
-      "is_sample": false
+      "created_by": "gylysymyntyb@gmail.com"
     },
     {
       "exam_id": "67db2b4cecceb6041dd43ab4",
@@ -1690,8 +1634,7 @@
       "id": "67db68ad0115e009cf0ea27a",
       "created_date": "2025-03-20T01:00:29.619000",
       "updated_date": "2025-03-20T01:00:29.619000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db42445367830c8c16db2d",
@@ -1713,8 +1656,7 @@
       "id": "67dbf8b9ffc0b181445cf797",
       "created_date": "2025-03-20T11:15:05.382000",
       "updated_date": "2025-03-20T11:15:05.382000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db42445367830c8c16db2d",
@@ -1736,8 +1678,7 @@
       "id": "67dbf8e3ffc0b181445cf8a5",
       "created_date": "2025-03-20T11:15:47.334000",
       "updated_date": "2025-03-20T11:15:47.334000",
-      "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "created_by": "andro3199@gmail.com"
     },
     {
       "exam_id": "67db42445367830c8c16db2d",
@@ -1759,8 +1700,67 @@
       "id": "67dbf8f7785012c3f65c18fd",
       "created_date": "2025-03-20T11:16:07.783000",
       "updated_date": "2025-03-20T11:16:07.783000",
+      "created_by": "andro3199@gmail.com"
+    },
+    {
+      "exam_id": "67db39bbf0537a05df33a5ce",
+      "answers": [
+        2,
+        2
+      ],
+      "score": 50,
+      "completed_date": "2025-03-23T14:03:05.476Z",
       "created_by": "andro3199@gmail.com",
-      "is_sample": false
+      "id": "1742691565127",
+      "created_date": "2025-03-23T00:59:25.127Z",
+      "updated_date": "2025-03-23T14:03:05.482Z"
+    },
+    {
+      "exam_id": "67db39bbf0537a05df33a5ce",
+      "answers": [
+        3,
+        2
+      ],
+      "score": 100,
+      "completed_date": "2025-03-23T01:10:16.006Z",
+      "id": "1742691901782",
+      "created_date": "2025-03-23T01:05:01.782Z",
+      "updated_date": "2025-03-23T01:10:16.012Z"
+    },
+    {
+      "exam_id": "67db391a1923598fa20bde3b",
+      "answers": [
+        4,
+        3,
+        2,
+        3,
+        2,
+        3,
+        3,
+        2,
+        1,
+        3,
+        4
+      ],
+      "score": 9,
+      "completed_date": "2025-03-23T01:26:54.454Z",
+      "created_by": "andro3199@gmail.com",
+      "id": "1742693214457",
+      "created_date": "2025-03-23T01:26:54.457Z",
+      "updated_date": "2025-03-23T01:26:54.457Z"
+    },
+    {
+      "exam_id": "67db39bbf0537a05df33a5ce",
+      "answers": [
+        0,
+        2
+      ],
+      "score": 50,
+      "completed_date": "2025-03-23T23:04:37.977Z",
+      "created_by": "gylysymyntyb@gmail.com",
+      "id": "1742771077982",
+      "created_date": "2025-03-23T23:04:37.982Z",
+      "updated_date": "2025-03-23T23:04:37.982Z"
     }
   ],
   "exportDate": "2025-03-20T15:48:04.960Z",

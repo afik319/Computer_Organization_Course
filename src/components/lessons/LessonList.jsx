@@ -25,9 +25,6 @@ export default function LessonList({ lessons, onSelect, selectedLesson, onEdit }
   // נגן על הקריאה ל-map בעזרת ערך ברירת מחדל
   const safeLessons = Array.isArray(lessons) ? lessons : [];
   
-  // Log the lessons we received to debug
-  console.log("LessonList received lessons:", safeLessons);
-  
   // יצירת מיפוי נושאים ייחודיים
   const sortedLessons = safeLessons.slice().sort((a, b) => a.order - b.order);
   const topics = Array.from(new Set(sortedLessons.map(l => l.topic)));

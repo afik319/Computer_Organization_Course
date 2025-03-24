@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,16 +8,21 @@ import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-export default function ExamTaker({ exam, onComplete, onCancel }) {
+export default function ExamTaker({ 
+  exam, 
+  onComplete, 
+  onCancel, 
+  showResults, 
+  setShowResults,
+  examScore
+}) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState(new Array(exam.questions.length).fill(null));
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showResults, setShowResults] = useState(false);
-  const [score, setScore] = useState(0);
-
+  const [isSubmitting, setSubmitting] = useState(false);
   const currentQuestion = exam.questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / exam.questions.length) * 100;
 
+  // ✅ שמירת תשובה לשאלה הנוכחית
   const handleAnswer = (value) => {
     const newAnswers = [...answers];
     newAnswers[currentQuestionIndex] = parseInt(value);
@@ -27,43 +31,55 @@ export default function ExamTaker({ exam, onComplete, onCancel }) {
 
   const isLastQuestion = currentQuestionIndex === exam.questions.length - 1;
 
+  // ✅ כפתור הבא -> הגשת הבחינה אם הגענו לשאלה האחרונה
   const handleNext = () => {
     if (isLastQuestion) {
       handleSubmit();
     } else {
-      setCurrentQuestionIndex(prev => prev + 1);
+      setCurrentQuestionIndex((prev) => prev + 1);
     }
   };
 
+  // ✅ כפתור חזרה -> מעביר לשאלה הקודמת
   const handleBack = () => {
-    setCurrentQuestionIndex(prev => prev - 1);
+    setCurrentQuestionIndex((prev) => prev - 1);
   };
+
 
   const handleSubmit = async () => {
-    setIsSubmitting(true);
-    try {
-      const correctAnswers = answers.reduce((count, answer, index) => {
-        return count + (answer === exam.questions[index].correct_answer ? 1 : 0);
-      }, 0);
-      
+    if (isSubmitting) 
+      return;
+  
+    setSubmitting(true);
+  
+    try {  
+      const correctAnswers = answers.reduce(
+        (count, answer, index) =>
+          count + (answer === exam.questions[index].correct_answer ? 1 : 0),
+        0
+      );
+  
       const finalScore = Math.round((correctAnswers / exam.questions.length) * 100);
-      setScore(finalScore);
-      setShowResults(true);
+  
+      if (!isSubmitting) 
+        await onComplete(exam.id, answers, finalScore, false);
       
-      await onComplete(exam.id, answers, finalScore);
     } catch (error) {
-      console.error("Error submitting exam:", error);
+      console.error("[handleSubmit] Error submitting exam:", error);
     } finally {
-      setIsSubmitting(false);
+      setSubmitting(false);
     }
   };
-
+  
+  
+  
+  // ✅ תצוגת תוצאות הבחינה (תישאר עד שהמשתמש יסגור)
   if (showResults) {
     return (
       <Card className="border-0 shadow-lg">
-        <CardHeader className={`${score >= exam.passing_score ? 'bg-green-600' : 'bg-red-600'} text-white rounded-t-lg py-8`}>
+        <CardHeader className={`${examScore >= exam.passing_score ? 'bg-green-600' : 'bg-red-600'} text-white rounded-t-lg py-8`}>
           <CardTitle className="text-3xl font-bold text-center">
-            {score >= exam.passing_score ? (
+            {examScore >= exam.passing_score ? (
               <div className="flex items-center justify-center gap-3">
                 <CheckCircle2 className="h-8 w-8" />
                 <span>כל הכבוד!</span>
@@ -76,16 +92,18 @@ export default function ExamTaker({ exam, onComplete, onCancel }) {
             )}
           </CardTitle>
         </CardHeader>
+
         <CardContent className="p-8">
           <div className="text-center mb-8">
-            <div className="text-6xl font-bold mb-4">{score}%</div>
+            <div className="text-6xl font-bold mb-4">{examScore}%</div>
             <p className="text-lg text-gray-600">
-              {score >= exam.passing_score
+              {examScore >= exam.passing_score
                 ? "עברת את הבחינה בהצלחה!"
                 : `ציון המעבר הנדרש הוא ${exam.passing_score}%. נסה שוב!`}
             </p>
           </div>
 
+          {/* ✅ סיכום תשובות מלא */}
           <div className="space-y-8 mt-8 border-t pt-8">
             <h3 className="text-2xl font-bold text-center mb-6">סיכום תשובות</h3>
             {exam.questions.map((question, index) => {
@@ -109,29 +127,17 @@ export default function ExamTaker({ exam, onComplete, onCancel }) {
                       <p className="text-gray-800 mb-4 text-right">
                         {question.question}
                       </p>
-                      {question.image_url && (
-                        <div className="mb-4">
-                          <img 
-                            src={question.image_url} 
-                            alt="תמונה לשאלה" 
-                            className="max-w-full rounded-lg shadow-sm"
-                          />
-                        </div>
-                      )}
                     </div>
                     <div className="mr-4">
                       {isCorrect ? (
-                        <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                          <CheckCircle2 className="h-5 w-5 text-green-600" />
-                        </div>
+                        <CheckCircle2 className="h-5 w-5 text-green-600" />
                       ) : (
-                        <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
-                          <AlertCircle className="h-5 w-5 text-red-600" />
-                        </div>
+                        <AlertCircle className="h-5 w-5 text-red-600" />
                       )}
                     </div>
                   </div>
 
+                  {/* ✅ תשובה נבחרת + תשובה נכונה */}
                   <div className="space-y-2 text-right" dir="rtl">
                     <div className="flex items-center">
                       <span className="font-medium ml-2">התשובה שלך:</span>
@@ -140,9 +146,9 @@ export default function ExamTaker({ exam, onComplete, onCancel }) {
                       </span>
                     </div>
                     {!isCorrect && (
-                      <div className="flex items-center text-green-700">
+                      <div className="flex items-center">
                         <span className="font-medium ml-2">התשובה הנכונה:</span>
-                        <span>{correctAnswer}</span>
+                        <span className="text-green-700">{correctAnswer}</span>
                       </div>
                     )}
                   </div>
@@ -151,13 +157,16 @@ export default function ExamTaker({ exam, onComplete, onCancel }) {
             })}
           </div>
 
-          <div className="mt-8 pt-6 border-t">
-            <Button 
-              onClick={() => onComplete(exam.id, answers, score, true)} 
-              className="w-full py-6 text-lg"
-            >
-              חזור לרשימת הבחינות
-            </Button>
+          {/* ✅ כפתורי סגירה */}
+          <div className="mt-8 pt-6 border-t flex gap-4">
+          <Button 
+            onClick={() => {
+              setShowResults(false);
+              onCancel(); // סוגר את הבחינה בפועל
+            }}
+          >
+            חזור לרשימת הבחינות
+          </Button>
           </div>
         </CardContent>
       </Card>
@@ -172,7 +181,7 @@ export default function ExamTaker({ exam, onComplete, onCancel }) {
             <div className="text-sm">שאלה {currentQuestionIndex + 1} מתוך {exam.questions.length}</div>
             <div className="text-sm">{exam.title}</div>
           </div>
-          <Progress value={progress} className="bg-blue-700 h-2" indicatorClassName="bg-white" />
+          <Progress value={progress} className="bg-blue-700 h-2"/>
         </CardHeader>
         <CardContent className="p-8">
           <AnimatePresence mode="wait">

@@ -1,11 +1,12 @@
-import { base44 } from './base44Client';
-
-export const Core = base44.integrations.Core;
-
-export const UploadFile = base44.integrations.Core.UploadFile;
-
-
-
-
-
-
+export const getUploadUrl = async (fileName, fileType) => {
+    try {
+      const response = await fetch(`/upload-url?fileName=${fileName}&fileType=${fileType}`);
+      if (!response.ok) throw new Error(`Failed to get upload URL: ${response.statusText}`);
+      const { url, key } = await response.json();
+      return { url, key };
+    } catch (error) {
+      console.error('❌ Failed to get upload URL:', error);
+      throw error;
+    }
+  };
+  

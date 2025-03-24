@@ -21,8 +21,8 @@ import ExamTaker from "../components/exams/ExamTaker";
 
 // Import entities directly
 import { User } from "@/api/entities";
-import { Exam } from "@/api/entities";
-import { ExamResult } from "@/api/entities";
+import { Exam, ExamResult } from "@/api/entities";
+
 
 // Define super admin email directly here too
 const SUPER_ADMIN_EMAIL = "afik.ratzon@gmail.com";
@@ -36,25 +36,23 @@ export default function ExamsPage() {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [examToDelete, setExamToDelete] = useState(null);
-  const navigate = useNavigate();
-
+  const [showResults, setShowResults] = useState(false);
+  const [examScore, setExamScore] = useState(0); 
+  
   // Load all exams and results from the database
   const loadData = async () => {
     try {
-      console.log("Fetching exams and results...");
       const [fetchedExams, fetchedResults] = await Promise.all([
         Exam.list(),
         ExamResult.list()
       ]);
-      
-      console.log("Fetched exams:", fetchedExams.length, fetchedExams);
-      console.log("Fetched results:", fetchedResults.length, fetchedResults);
-      
-      // Sort exams by topic
+            
       const sortedExams = [...fetchedExams].sort((a, b) => {
-        return a.topic.localeCompare(b.topic);
-      });
-      
+        const topicA = String(a.topic || "").trim();
+        const topicB = String(b.topic || "").trim();
+        return topicA.localeCompare(topicB, 'he');
+      });      
+     
       setExams(sortedExams);
       setResults(fetchedResults);
       
@@ -79,7 +77,6 @@ export default function ExamsPage() {
         try {
           const user = await User.me();
           setCurrentUser(user);
-          console.log("Current user:", user);
         } catch (error) {
           console.error("Error getting user:", error);
           setLoading(false);
@@ -184,41 +181,34 @@ export default function ExamsPage() {
     }
   };
 
+  let isProcessing = false;
+
   const handleExamComplete = async (examId, answers, score, closeView = false) => {
+    if (isProcessing) 
+      return;
+  
+    isProcessing = true;
+  
     try {
-      console.log(`Saving exam result. Exam ID: ${examId}, Score: ${score}%, Answers:`, answers);
-      
       await ExamResult.create({
         exam_id: examId,
-        answers: answers,
-        score: score,
+        answers,
+        score,
         completed_date: new Date().toISOString(),
-        created_by: currentUser.email, // רק אם המשתמש יוצר בעצמו את התוצאה
-        is_sample: false
+        created_by: currentUser.email
       });
+  
+      setExamScore(score);
       
-      
-      toast({
-        title: "בחינה הושלמה",
-        description: `ציון: ${score}%`,
-      });
-      
-      // Only close the exam view if explicitly requested
-      if (closeView) {
-        setTakingExam(false);
-      }
-      
-      // Reload data to update results
-      await loadData();
+      setShowResults(true);
+  
     } catch (error) {
-      console.error("Error saving exam result:", error);
-      toast({
-        title: "שגיאה",
-        description: "אירעה שגיאה בשמירת תוצאות הבחינה",
-        variant: "destructive"
-      });
+      console.error("[handleExamComplete] Error:", error);
+    } finally {
+      isProcessing = false;
     }
   };
+  
   
   // Only super admin can add/edit exams
   const isSuperAdmin = currentUser?.email === SUPER_ADMIN_EMAIL;
@@ -272,11 +262,17 @@ export default function ExamsPage() {
                 onSave={handleSaveExam}
                 onCancel={() => setShowForm(false)}
               />
-            ) : takingExam && selectedExam ? (
+            ) : selectedExam && takingExam ? ( // ✅ הוספנו בדיקה ל-selectedExam
               <ExamTaker
                 exam={selectedExam}
                 onComplete={handleExamComplete}
-                onCancel={() => setTakingExam(false)}
+                onCancel={() => {
+                  setTakingExam(false);
+                  setShowResults(false);
+                }}
+                showResults={showResults}
+                setShowResults={setShowResults}
+                examScore={examScore} // הוסף את זה
               />
             ) : selectedExam ? (
               <div className="bg-white p-8 rounded-lg border shadow-md text-right">
@@ -293,7 +289,11 @@ export default function ExamsPage() {
                   </div>
                   {!isSuperAdmin && (
                     <Button 
-                      onClick={() => setTakingExam(true)}
+                      onClick={() => {
+                        if (!takingExam) {
+                          setTakingExam(true);
+                        }
+                      }}
                       className="bg-teal-600 hover:bg-teal-700 text-lg px-6 py-3"
                     >
                       התחל בחינה
@@ -315,7 +315,7 @@ export default function ExamsPage() {
         </div>
       </div>
 
-      <AlertDialog open={!!examToDelete} onOpenChange={() => setExamToDelete(null)}>
+      <AlertDialog open={!!examToDelete} onOpenChange={(isOpen) => !isOpen && setExamToDelete(null)}>
         <AlertDialogContent>
           <AlertDialogHeader className="text-right">
             <AlertDialogTitle>האם אתה בטוח שברצונך למחוק בחינה זו?</AlertDialogTitle>

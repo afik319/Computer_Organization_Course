@@ -21,24 +21,19 @@ export default function Layout({ children, currentPageName }) {
   const [checkingPermission, setCheckingPermission] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
   const navigate = useNavigate();
-  
+  const [permissionsLoaded, setPermissionsLoaded] = useState(false);
+
   // Check if user has permission to access the system - wrapped in useCallback
   const checkUserPermission = useCallback(async (email) => {
     if (!email) return null;
-    
-    console.log("Checking permissions for:", email);
-    
-    if (email === SUPER_ADMIN_EMAIL) {
-      console.log("User is super admin");
+        
+    if (email === SUPER_ADMIN_EMAIL) 
       return "approved";
-    }
     
     try {
       const registeredUsers = await RegisteredUser.list();
       const userRecords = registeredUsers.filter(user => user.email === email);
-      
-      console.log("Found registered users:", userRecords);
-      
+            
       if (userRecords.length === 0) {
         console.log("User not registered");
         return null;
@@ -49,7 +44,6 @@ export default function Layout({ children, currentPageName }) {
       );
       
       const latestStatus = sortedUsers[0].status || null;
-      console.log("Latest user status:", latestStatus);
       
       if (latestStatus === "approved" || latestStatus === "pending" || latestStatus === "rejected") {
         return latestStatus;
@@ -133,7 +127,6 @@ export default function Layout({ children, currentPageName }) {
           
           setTimeout(() => {
             navigate(createPageUrl("Dashboard"));
-            window.location.reload();
           }, 1000);
         }
       } else if (permission === "pending") {
@@ -154,40 +147,84 @@ export default function Layout({ children, currentPageName }) {
       setCheckingPermission(false);
     }
   };
-  
+
   useEffect(() => {
     const checkUserSession = async () => {
-      const user = await User.me();
-      if (user) {
+      if (permissionsLoaded) return;
+
+      try {
+        setLoading(true);
+        let user;
+        try {
+          user = await User.me();
+        } catch (error) {
+          console.log("No user session");
+          setCurrentUser(null);
+          setUserPermission(null);
+          setPermissionsLoaded(true); // 🚀 אפשר להמשיך גם אם אין משתמש מחובר
+          setLoading(false);
+          return;
+        }
+  
+        if (!user || !user.email) {
+          console.log("Invalid user data");
+          setCurrentUser(null);
+          setUserPermission(null);
+          setPermissionsLoaded(true);
+          setLoading(false);
+          return;
+        }
+  
         setCurrentUser(user);
-        setUserPermission(user.status);
+  
+        // ✅ רק אחרי טעינת הנתונים – לעדכן הרשאות
+        const permission = await checkUserPermission(user.email);
+        setUserPermission(permission);
+  
+        if (permission === "rejected") {
+          toast({
+            title: "אין הרשאות גישה",
+            description: "בקשתך לגישה למערכת נדחתה",
+            variant: "destructive"
+          });
+        } else if (permission === null) {
+          setRequestSent(false);
+        } else if (permission === "pending") {
+          setRequestSent(true);
+        }
+  
+        setPermissionsLoaded(true); // 🚀 נסמן שהטעינה הסתיימה
+      } catch (error) {
+        console.error("Error checking user session:", error);
+        setCurrentUser(null);
+        setUserPermission(null);
+        setPermissionsLoaded(true);
+      } finally {
+        setLoading(false);
       }
     };
   
     checkUserSession();
-  }, []);
+  }, [navigate, checkUserPermission]);
 
   const handleLogin = async () => {
     try {
       const userInfo = await login();
-
-      console.log("User info received:", userInfo);
 
       if (!userInfo || typeof userInfo.email !== 'string' || !userInfo.email.trim()) {
         throw new Error("Invalid user data");
       }
 
       const user = await User.login(userInfo.email, userInfo.name || '');
-
-      console.log("User logged in:", user);
       setCurrentUser(user);
 
-      if (user.status === "approved") {
+      const permission = await checkUserPermission(userInfo.email);
+      setUserPermission(permission);
+
+      if (permission === "approved") 
         navigate(createPageUrl("Dashboard"));
-      } else {
-        setUserPermission(user.status);
-      }
-    } catch (error) {
+    } 
+    catch (error) {
       console.error("Login error:", error);
     }
   };
@@ -200,63 +237,6 @@ export default function Layout({ children, currentPageName }) {
       console.error('Logout error:', error);
     }
   };
-
-
-  // Use this effect to check user session and permissions once on load
-  useEffect(() => {
-    const checkUserSession = async () => {
-      try {
-        setLoading(true);
-        
-        let user;
-        try {
-          user = await User.me();
-        } catch (error) {
-          console.log("No user session");
-          setCurrentUser(null);
-          setUserPermission(null);
-          setLoading(false);
-          return;
-        }
-        
-        if (!user || !user.email) {
-          console.log("Invalid user data");
-          setCurrentUser(null);
-          setUserPermission(null);
-          setLoading(false);
-          return;
-        }
-
-        console.log("User logged in:", user.email);
-        setCurrentUser(user);
-        
-        const permission = await checkUserPermission(user.email);
-        console.log("User permission:", permission);
-        setUserPermission(permission);
-        
-        if (permission === "rejected") {
-          toast({
-            title: "אין הרשאות גישה",
-            description: "בקשתך לגישה למערכת נדחתה",
-            variant: "destructive"
-          });
-        } else if (permission === null) {
-          setRequestSent(false);
-        } else if (permission === "pending") {
-          setRequestSent(true);
-        }
-        
-      } catch (error) {
-        console.error("Error checking user session:", error);
-        setCurrentUser(null);
-        setUserPermission(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkUserSession();
-  }, [navigate, checkUserPermission]);
 
   // Loading screen
   if (loading) {
@@ -293,8 +273,7 @@ export default function Layout({ children, currentPageName }) {
     );
   }
 
-  // No permission screen
-  if (userPermission !== "approved" && currentUser.email !== SUPER_ADMIN_EMAIL) {
+  if (permissionsLoaded && userPermission !== "approved" && currentUser.email !== SUPER_ADMIN_EMAIL) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4" dir="rtl">
         <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8 text-center">
@@ -371,17 +350,17 @@ export default function Layout({ children, currentPageName }) {
     { name: 'בחינות', icon: GraduationCap, href: createPageUrl('Exams') },
   ];
 
-  if (currentUser?.email === SUPER_ADMIN_EMAIL) {
+  if (permissionsLoaded && currentUser?.email === SUPER_ADMIN_EMAIL) {
     navigation.push({ name: 'ניהול הרשאות', icon: Shield, href: createPageUrl('UserManagement') });
   }
-
+  
   return (
     <div className="min-h-screen bg-gray-50" dir="rtl">
       <header className="fixed top-0 right-0 left-0 z-10 bg-white shadow-md px-6 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <img
             className="w-auto h-10 ml-6"
-            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/149dcc_c9f6f1d8-6f78-405c-b2dd-3663c0fe03f1.jpeg"
+            src="https://afik-app-uploads-public.s3.us-east-1.amazonaws.com/uploads/academix-pro-logo.jpeg"
             alt="Logo"
           />
           

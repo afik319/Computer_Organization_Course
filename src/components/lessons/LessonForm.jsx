@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { X, Plus, Upload, Loader2, Edit2, Trash2 } from "lucide-react";
-import { UploadFile } from "@/api/integrations";
+import { getUploadUrl } from "@/api/upload";
 import {
   Dialog,
   DialogContent,
@@ -15,8 +15,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-// עורך טקסט עשיר
-import ReactQuill from 'react-quill';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 
 // נושאים ברירת מחדל לשימוש ראשוני
 const DEFAULT_TOPICS = [
@@ -32,28 +32,6 @@ const DEFAULT_TOPICS = [
   { id: "topic_10", label: "זיכרון המטמון" }
 ];
 
-// הגדרת עורך טקסט
-const quillModules = {
-  toolbar: [
-    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-    ['bold', 'italic', 'underline', 'strike'],
-    [{ 'color': [] }, { 'background': [] }],
-    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-    [{ 'align': [] }],
-    ['link'],
-    ['clean']
-  ],
-};
-
-const quillFormats = [
-  'header',
-  'bold', 'italic', 'underline', 'strike',
-  'color', 'background',
-  'list', 'bullet',
-  'align',
-  'link'
-];
-
 export default function LessonForm({ lesson, onSave, onCancel }) {
   const [isUploading, setIsUploading] = useState(false);
   const [formData, setFormData] = useState(lesson || {
@@ -64,6 +42,14 @@ export default function LessonForm({ lesson, onSave, onCancel }) {
     attachments: [],
     order: 0
   });
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: formData.description,
+    onUpdate: ({ editor }) => {
+      handleInputChange('description', editor.getHTML());
+    },
+  });
+  
   
   // הוספת מצב לניהול נושאים - שימוש ב-localStorage לשמירת נושאים מותאמים אישית
   const [availableTopics, setAvailableTopics] = useState([]);
@@ -116,27 +102,100 @@ export default function LessonForm({ lesson, onSave, onCancel }) {
     try {
       console.log(`Starting file upload. Type: ${type}, Size: ${file.size} bytes, Name: ${file.name}`);
       
-      // העלאת הקובץ ללא בדיקת גודל - אנחנו מסירים את המגבלה
-      const { file_url } = await UploadFile({ file });
-      console.log(`Upload completed successfully. URL: ${file_url}`);
-      
+      const { url, key } = await getUploadUrl(file.name, file.type);
+
+      await fetch(url, {
+        method: 'PUT',
+        body: file,
+        headers: {
+          'Content-Type': file.type
+        }
+      });
+
+      const fileUrl = `https://${import.meta.env.VITE_AWS_BUCKET_NAME}.s3.${import.meta.env.VITE_AWS_REGION}.amazonaws.com/${key}`;
       if (type === 'video') {
-        handleInputChange('video_url', file_url);
-      } else {
+        const videoURL = `/api/get-video-link?fileName=${key}`;
+        handleInputChange('video_url', videoURL);
+      } 
+      else {
         const newAttachment = {
           title: file.name,
-          file_url,
+          file_url: fileUrl,
           type
         };
         handleInputChange('attachments', [...formData.attachments, newAttachment]);
       }
-    } catch (error) {
+    } 
+    catch (error) {
       console.error('Upload failed:', error);
-      // אפשר להוסיף כאן הודעת שגיאה למשתמש
-    } finally {
+    } 
+    finally {
       setIsUploading(false);
     }
   };
+
+  const handlePdfUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+  
+    setIsUploading(true);
+  
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+  
+      const response = await fetch('/api/upload-pdf', {
+        method: 'POST',
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to upload PDF');
+      }
+  
+      const data = await response.json();
+  
+      const newAttachment = {
+        title: file.name,
+        file_url: data.url,
+        type: 'pdf'
+      };
+  
+      setFormData(prev => ({
+        ...prev,
+        attachments: [...prev.attachments, newAttachment],
+      }));
+  
+    } catch (error) {
+      console.error('Error uploading PDF:', error);
+      alert('Error uploading PDF');
+    } finally {
+      setIsUploading(false);
+    }
+  };  
+
+  const handleSave = async () => {
+    try {
+      const response = await fetch('/api/update-lessons', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: { 'Content-Type': 'application/json' },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to save lesson data.');
+      }
+        
+      // ✅ סגירת הטופס לאחר השמירה
+      onCancel();
+  
+    } catch (error) {
+      console.error('❌ Error saving lesson data:', error);
+      alert('❌ שגיאה בשמירת הנתונים.');
+    }
+  };
+  
+  
 
   const removeAttachment = (index) => {
     const newAttachments = formData.attachments.filter((_, i) => i !== index);
@@ -188,14 +247,12 @@ export default function LessonForm({ lesson, onSave, onCancel }) {
         <div className="space-y-3">
           <Label htmlFor="description" className="text-lg">תיאור</Label>
           <div className="text-editor-container" dir="rtl">
-            <ReactQuill
-              value={formData.description}
-              onChange={(content) => handleInputChange('description', content)}
-              modules={quillModules}
-              formats={quillFormats}
-              className="text-lg border-gray-300 rounded-md"
-              theme="snow"
-            />
+            {editor && (
+              <EditorContent
+                editor={editor}
+                className="text-lg border-gray-300 rounded-md"
+              />
+            )}
           </div>
         </div>
 
@@ -373,11 +430,17 @@ export default function LessonForm({ lesson, onSave, onCancel }) {
                   type="file"
                   accept=".pdf"
                   className="hidden"
-                  onChange={(e) => handleFileUpload(e, 'pdf')}
+                  onChange={handlePdfUpload}
                 />
                 <div className="cursor-pointer flex items-center justify-center border-2 border-dashed border-blue-300 rounded-lg p-4 hover:border-blue-500 transition-colors">
-                  <Plus className="h-5 w-5 ml-2 text-blue-800" />
-                  <span className="text-lg font-medium">הוספת PDF</span>
+                  {isUploading ? (
+                    <Loader2 className="h-5 w-5 animate-spin text-blue-800" />
+                  ) : (
+                    <>
+                      <Plus className="h-5 w-5 ml-2 text-blue-800" />
+                      <span className="text-lg font-medium">הוספת PDF</span>
+                    </>
+                  )}
                 </div>
               </label>
             </div>
@@ -386,7 +449,7 @@ export default function LessonForm({ lesson, onSave, onCancel }) {
       </CardContent>
       <CardFooter className="flex justify-start gap-3 p-6 bg-gray-50 rounded-b-lg">
         <Button 
-          onClick={() => onSave(formData)} 
+          onClick={handleSave}
           disabled={isUploading}
           className="bg-teal-600 hover:bg-teal-700 text-lg px-6 py-3"
         >

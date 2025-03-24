@@ -1,25 +1,34 @@
+import { fileURLToPath } from 'url';
 import express from 'express';
 import cors from 'cors';
 import uploadRouter from './upload.js'; 
 import dotenv from 'dotenv';
 import path from 'path';
 import videoRouter from './videoRoutes.js';
+import topicRouter from '../api/topicRoutes.js';
+import examRouter from '../api/examRoutes.js'; 
+import lessonRouter from './lessonRoutes.js'; 
+import registeredUserRoutes from './registeredUserRoutes.js';
 
 dotenv.config();
-dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+// ✅ רישום כל הנתיבים כראוטרים באפליקציה
 app.use('/api', uploadRouter);
 app.use('/api', videoRouter);
+app.use('/api', topicRouter);
+app.use('/api', examRouter);
+app.use('/api', lessonRouter); 
+app.use('/api', registeredUserRoutes);
 
-// --- הגשת קבצים סטטיים ---
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+app.use('/data', express.static(path.join(__dirname, 'data')));
 
 app.use(express.static(path.join(__dirname, '..', '..', 'dist')));
 
