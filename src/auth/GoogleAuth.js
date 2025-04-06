@@ -1,5 +1,6 @@
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import { useRef } from 'react';
+import { User } from '../api/User.js';
 
 export const useGoogleAuth = () => {
   // משתנה ref ישמור על resolve ו־reject של ההבטחה
@@ -7,6 +8,7 @@ export const useGoogleAuth = () => {
 
   // זהו ה־hook המקורי מ־@react-oauth/google
   const rawLogin = useGoogleLogin({
+    ux_mode: 'popup',
     onSuccess: async (tokenResponse) => {
       // אם מישהו ממתין ל־Promise:
       if (loginPromiseRef.current) {
@@ -16,11 +18,10 @@ export const useGoogleAuth = () => {
           });
           const userInfo = await res.json();
 
-          console.log("User info from Google:", userInfo);
-
-          if (!userInfo.email) {
-            throw new Error("Email is missing from Google response");
+          if(userInfo.email){
+            const data = await User.login(userInfo.email, userInfo.name);
           }
+          else throw new Error("Email is missing from Google response");
 
           // resolve להבטחה שלנו עם הנתונים
           loginPromiseRef.current.resolve(userInfo);
@@ -55,7 +56,6 @@ export const useGoogleAuth = () => {
   // לוגאאוט כרגיל
   const logout = () => {
     googleLogout();
-    localStorage.removeItem("currentUserEmail");
   };
 
   return { login, logout };

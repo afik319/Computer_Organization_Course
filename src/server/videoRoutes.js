@@ -2,6 +2,7 @@ import express from 'express';
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { fromEnv } from '@aws-sdk/credential-providers';
+import { logger } from '../lib/logger.js';
 
 const router = express.Router();
 
@@ -26,7 +27,7 @@ router.get('/get-video-link', async (req, res) => {
 
     res.json({ success: true, url });
   } catch (err) {
-    console.error('❌ Error generating presigned URL:', err);
+    logger.info('❌ Error generating presigned URL:', err);
     res.status(500).json({ success: false, error: err.message });
   }
 });

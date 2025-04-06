@@ -5,7 +5,7 @@ export const getUploadUrl = async (fileName, fileType) => {
       const { url, key } = await response.json();
       return { url, key };
     } catch (error) {
-      console.error('❌ Failed to get upload URL:', error);
+      console.log('❌ Failed to get upload URL:', error);
       throw error;
     }
   };

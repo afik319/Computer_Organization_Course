@@ -1,55 +1,85 @@
-import storage from "../storage";
-
 export const User = {
   me: async () => {
-    const email = storage.get("currentUserEmail");
-    if (!email) return null;
-
-    const users = storage.get("users") || [];
-    return users.find(user => user.email === email) || null;
-  },
+    try {
+      const res = await fetch(`/api/registered-users/me`, {
+        method: 'GET',
+        credentials: 'include'
+      });
+  
+      if (!res.ok) return null;
+      return await res.json();
+    } catch (err) {
+      console.log('Failed to fetch current user:', err);
+      return null;
+    }
+  },  
 
   login: async (email, fullName) => {
-    let users = storage.get("users") || [];
-
-    let user = users.find(user => user.email === email);
-
-    if (!user) {
-      // אם המשתמש לא קיים – יצטרך לבקש הרשאות
-      user = {
-        id: email,
-        email,
-        full_name: fullName || "",
-        status: "pending", // ממתין לאישור
-        role: "user"
-      };
-      users.push(user);
-      storage.set("users", users);
+    try {
+      const res = await fetch('/api/registered-users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, fullName }),
+        credentials: 'include' 
+      });
+      if (!res.ok) {
+        console.log('Login failed:', res.status, await res.text());
+        return null;
+      }
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      console.log('Failed to login:', err);
+      return null;
     }
+  },  
 
-    storage.set("currentUserEmail", email);
-    return user;
+  logout: async () => {
+    try {
+      await fetch('/api/registered-users/logout', {
+        method: 'POST',
+        credentials: 'include'
+      });
+    } catch (err) {
+      console.log('Failed to logout:', err);
+    }
   },
 
-  logout: () => {
-    storage.remove("currentUserEmail");
+  approve: async (email) => {
+    try {
+      await fetch('/api/registered-users/approve', {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify({ email }),
+      });
+    } catch (err) {
+      console.log('Failed to approve user:', err);
+    }
   },
 
-  approve: (email) => {
-    let users = storage.get("users") || [];
-    users = users.map(user =>
-      user.email === email ? { ...user, status: "approved" } : user
-    );
-    storage.set("users", users);
+  reject: async (email) => {
+    try {
+      await fetch('/api/registered-users/reject', {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify({ email }),
+      });
+    } catch (err) {
+      console.log('Failed to reject user:', err);
+    }
   },
 
-  reject: (email) => {
-    let users = storage.get("users") || [];
-    users = users.filter(user => user.email !== email);
-    storage.set("users", users);
-  },
-
-  list: () => {
-    return storage.get("users") || [];
+  list: async () => {
+    try {
+      const res = await fetch('/api/registered-users', {
+        method: 'GET',
+        credentials: 'include' 
+      });
+      if (!res.ok) return [];
+      return await res.json();
+    } catch (err) {
+      console.log('Failed to list users:', err);
+      return [];
+    }
   },
 };

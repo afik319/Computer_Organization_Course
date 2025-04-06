@@ -1,39 +1,40 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
   server: {
     allowedHosts: true,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3001',
-        changeOrigin: true,
-      },
-      '/upload-url': {
-        target: 'http://localhost:3001',
-        changeOrigin: true,
-        secure: false,
-      },
-      '/get-file-url': {
-        target: 'http://localhost:3001',
-        changeOrigin: true,
-        secure: false,
-      }
-    },
+    host: true,
+    port: 3001,
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
-    extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json']
+    extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
   },
-  optimizeDeps: {
+  build: {
+    target: 'esnext',
+    outDir: 'dist',
+    emptyOutDir: true,
+    minify: 'esbuild', // ✅ מהיר יותר
+    sourcemap: false, // ✅ מבטל sourcemaps – מזרז
+    brotliSize: false, // ✅ חוסך חישובים מיותרים
+    cssCodeSplit: true, // ✅ שימוש בברירת מחדל – טוב לרינדור מהיר
+    chunkSizeWarningLimit: 1500,
     esbuildOptions: {
       loader: {
         '.js': 'jsx',
       },
     },
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom'], // ✅ פיצול לקובץ נפרד – משפר cache
+        },
+      },
+    },
   },
-})
+});

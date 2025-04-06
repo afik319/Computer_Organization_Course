@@ -1,0 +1,196 @@
+# Query: logger.info
+# Including: /home/ec2-user/Computer_Organization_Course/*
+# ContextLines: 1
+
+49 results - 10 files
+
+~/Computer_Organization_Course/server.js:
+  45  app.use('/api', (req, res) => {
+  46:   logger.info(`\u274c 404 Not Foundd: ${req.method} ${req.path}`);
+  47    res.status(404).json({ error: 'API endpoint not found' });
+
+  50  console.log("\ud83d\ude80 Starting server...");
+  51: logger.info("\ud83d\ude80 Starting server...");
+  52  app.listen(3001, '0.0.0.0', (err) => {
+
+  54      console.log("\u274c Failed to start server:", err);
+  55:     logger.info("\u274c Failed to start server:", err);
+  56    } else {
+  57      console.log(`\u2705 Server running on port 3001`);
+  58:     logger.info(`\u2705 Server running on port 3001`);
+  59    }
+
+  61  console.log("\ud83d\udc49 After app.listen()")
+  62: logger.info("\ud83d\udc49 After app.listen()")
+
+~/Computer_Organization_Course/src/storage.server.js:
+  21        if (!fileMapping[key]) {
+  22:         logger.info(`❌ Invalid key [${key}] - not mapped to any file`);
+  23          return [];
+
+  26        const filePath = path.resolve(__dirname, 'data', fileMapping[key]);
+  27:       logger.info(`➡️ Attempting to read file: ${filePath}`);
+  28    
+
+  34      } catch (error) {
+  35:       logger.info(`❌ Failed to read ${key}:`, error);
+  36        return [];
+
+  45        if (!fileMapping[key]) {
+  46:         logger.info(`❌ Invalid key [${key}] - not mapped to any file`);
+  47          return;
+
+  50        const filePath = path.resolve(__dirname, 'data', fileMapping[key]);
+  51:       logger.info(`➡️ Attempting to write file: ${filePath}`);
+  52  
+
+  55  
+  56:       logger.info(`✅ Data written to file [${filePath}]`);
+  57      } catch (error) {
+  58:       logger.info(`❌ Failed to write ${key}:`, error);
+  59      }
+
+~/Computer_Organization_Course/src/api/courseContentApi.js:
+  10      const data = await storage.getAll('courseContent');
+  11:     //logger.info("✅ Course content data from storage:", data);
+  12  
+
+  16  
+  17:     logger.info("❌ No course content found");
+  18      res.json([]); 
+  19    } catch (error) {
+  20:     logger.info("❌ Failed to load course content:", error);
+  21      res.status(500).json({ error: 'Failed to load course content' });
+
+  42    } catch (error) {
+  43:     logger.info("❌ Failed to add course content:", error);
+  44      res.status(500).json({ error: 'Failed to add course content' });
+
+  61    } catch (error) {
+  62:     logger.info("❌ Failed to update course content:", error);
+  63      res.status(500).json({ error: 'Failed to update course content' });
+
+  77    } catch (error) {
+  78:     logger.info("❌ Failed to delete course content:", error);
+  79      res.status(500).json({ error: 'Failed to delete course content' });
+
+~/Computer_Organization_Course/src/api/topicRoutes.js:
+  15      const data = fs.readFileSync(filePath);
+  16:     logger.info('Topics data loaded:', data);
+  17      const topics = JSON.parse(data);
+
+  19    } catch (error) {
+  20:     logger.info('Error reading topics:', error);
+  21      res.status(500).json({ error: 'Failed to load topics' });
+
+  39    } catch (error) {
+  40:     logger.info('Error adding topic:', error);
+  41      res.status(500).json({ error: 'Failed to add topic' });
+
+  55    } catch (error) {
+  56:     logger.info('Error deleting topic:', error);
+  57      res.status(500).json({ error: 'Failed to delete topic' });
+
+~/Computer_Organization_Course/src/server/lessonRoutes.js:
+   18    } catch (error) {
+   19:     logger.info('❌ Error reading lessons file:', error);
+   20      return [];
+
+   27      fs.writeFileSync(lessonsFilePath, data, 'utf8');
+   28:     logger.info('✅ Lessons saved successfully');
+   29    } catch (error) {
+   30:     logger.info('❌ Error saving lessons file:', error);
+   31    }
+
+   76  
+   77:   logger.info(`🆕 New lesson created with id: ${newLesson.id}`);
+   78    res.status(201).json(newLesson);
+
+  107  
+  108:     logger.info(`🚮 Attempting to delete lesson with id: ${id}`);
+  109      const updatedLessons = lessonsData.lessons.filter(lesson => lesson.id !== id);
+
+  112      fs.writeFileSync(lessonsFilePath, JSON.stringify(lessonsData, null, 2));
+  113:     logger.info('✅ File updated successfully!');
+  114      res.status(200).json({ success: true });
+  115    } catch (err) {
+  116:     logger.info('❌ Error deleting lesson:', err);
+  117      res.status(500).json({ success: false, error: err.message });
+
+~/Computer_Organization_Course/src/server/lessons.js:
+  14    } catch (err) {
+  15:     logger.info('Error updating lessons:', err);
+  16      res.status(500).json({ error: 'Failed to update lessons' });
+
+~/Computer_Organization_Course/src/server/migrate-images-to-aws.js:
+  17    try {
+  18:     logger.info(`🔍 Fetching files from bucket: ${BUCKET_NAME}/${PREFIX}`);
+  19  
+
+  26      if (!listObjects.Contents || listObjects.Contents.length === 0) {
+  27:       logger.info('🚫 No files found.');
+  28        return;
+
+  31      for (const file of listObjects.Contents) {
+  32:       logger.info(`🚀 Setting public-read permission for: ${file.Key}`);
+  33  
+
+  40  
+  41:       logger.info(`✅ ${file.Key} is now public-read`);
+  42      }
+  43  
+  44:     logger.info('🎉 All files have been set to public-read!');
+  45    } catch (err) {
+  46:     logger.info(`❌ Error: ${err.message}`);
+  47    }
+
+~/Computer_Organization_Course/src/server/registeredUserRoutes.js:
+   20    } catch (error) {
+   21:     logger.info('❌ Error reading registeredUsers.json:', error);
+   22      return {};
+
+   28      fs.writeFileSync(filePath, JSON.stringify(obj, null, 2), 'utf8');
+   29:     logger.info('✅ registeredUsers.json updated successfully');
+   30    } catch (error) {
+   31:     logger.info('❌ Error saving registeredUsers.json:', error);
+   32    }
+
+   84  
+   85:   logger.info('✅ New user created:', newUser);
+   86    res.status(201).json(newUser);
+
+  101      writeUsersArray(users);
+  102:     logger.info(`✅ User updated: ${id}`);
+  103      res.status(200).json(users[index]);
+
+  117      writeUsersArray(users);
+  118:     logger.info(`✅ User deleted: ${id}`);
+  119      res.status(200).json({ success: true });
+
+~/Computer_Organization_Course/src/server/upload.js:
+  43    } catch (err) {
+  44:     logger.info('❌ Error generating upload URL:', err);
+  45      res.status(500).json({ error: 'Failed to generate upload URL', details: err.message });
+
+  64    } catch (err) {
+  65:     logger.info("❌ Error generating file URL:", err);
+  66      res.status(500).json({ error: 'Failed to generate file URL', details: err.message });
+
+  72      if (!req.file) {
+  73:       logger.info('⚠️ No file received');
+  74        return res.status(400).json({ error: 'No file provided' });
+  75      }
+  76:     logger.info('📄 File received:', req.file.originalname, req.file.size, 'bytes');
+  77  
+
+  92  
+  93:     logger.info('✅ PDF uploaded:', fileUrl);
+  94      res.status(200).json({ url: fileUrl });
+  95    } catch (err) {
+  96:     logger.info('❌ Error uploading PDF:', err);
+  97      res.status(500).json({ error: 'Failed to upload file', details: err.message });
+
+~/Computer_Organization_Course/src/server/videoRoutes.js:
+  29    } catch (err) {
+  30:     logger.info('❌ Error generating presigned URL:', err);
+  31      res.status(500).json({ success: false, error: err.message });

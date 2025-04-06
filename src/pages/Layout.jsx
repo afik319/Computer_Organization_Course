@@ -1,27 +1,27 @@
 
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { LayoutDashboard, Book, GraduationCap, LogOut, Shield, Loader2, AlertTriangle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { User } from "@/api/entities";
 import { RegisteredUser } from "@/api/entities";
+import { User } from "@/api/User";
 import { cn } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
 import { useGoogleAuth } from "@/auth/GoogleAuth";
+import { useUser } from "../context/UserContext";
 
-// Define the super admin email for admin features only
 const SUPER_ADMIN_EMAIL = "afik.ratzon@gmail.com";
 
 export default function Layout({ children, currentPageName }) {
   const { login, logout } = useGoogleAuth(); 
-  const [currentUser, setCurrentUser] = useState(null);
   const [userPermission, setUserPermission] = useState(null);
   const [loading, setLoading] = useState(true);
   const [checkingPermission, setCheckingPermission] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
   const navigate = useNavigate();
   const [permissionsLoaded, setPermissionsLoaded] = useState(false);
+  const { currentUser, setCurrentUser } = useUser();
 
   // Check if user has permission to access the system - wrapped in useCallback
   const checkUserPermission = useCallback(async (email) => {
@@ -52,7 +52,7 @@ export default function Layout({ children, currentPageName }) {
         return null;
       }
     } catch (error) {
-      console.error("Error checking permissions:", error);
+      console.log("Error checking permissions:", error);
       return null;
     }
   }, []);
@@ -98,7 +98,7 @@ export default function Layout({ children, currentPageName }) {
         description: "בקשת ההרשאות נשלחה בהצלחה, המנהל יבדוק אותה בהקדם",
       });
     } catch (error) {
-      console.error("Error requesting access:", error);
+      console.log("Error requesting access:", error);
       toast({
         title: "שגיאה בשליחת הבקשה",
         description: "אירעה שגיאה בשליחת בקשת ההרשאות",
@@ -114,7 +114,6 @@ export default function Layout({ children, currentPageName }) {
     setCheckingPermission(true);
     try {
       const permission = await checkUserPermission(currentUser.email);
-      console.log("Manual permission refresh:", permission);
       
       if (permission !== userPermission) {
         setUserPermission(permission);
@@ -142,101 +141,71 @@ export default function Layout({ children, currentPageName }) {
         });
       }
     } catch (error) {
-      console.error("Error refreshing permission:", error);
+      console.log("Error refreshing permission:", error);
     } finally {
       setCheckingPermission(false);
     }
   };
 
   useEffect(() => {
-    const checkUserSession = async () => {
-      if (permissionsLoaded) return;
-
+    const restoreUser = async () => {
       try {
-        setLoading(true);
-        let user;
-        try {
-          user = await User.me();
-        } catch (error) {
-          console.log("No user session");
-          setCurrentUser(null);
-          setUserPermission(null);
-          setPermissionsLoaded(true); // 🚀 אפשר להמשיך גם אם אין משתמש מחובר
-          setLoading(false);
-          return;
+        const user = await User.me();
+        if (user) {
+          setCurrentUser(user);
+    
+          const permission = await checkUserPermission(user.email); // ✅ חדש
+          setUserPermission(permission); // ✅ חדש
         }
-  
-        if (!user || !user.email) {
-          console.log("Invalid user data");
-          setCurrentUser(null);
-          setUserPermission(null);
-          setPermissionsLoaded(true);
-          setLoading(false);
-          return;
-        }
-  
-        setCurrentUser(user);
-  
-        // ✅ רק אחרי טעינת הנתונים – לעדכן הרשאות
-        const permission = await checkUserPermission(user.email);
-        setUserPermission(permission);
-  
-        if (permission === "rejected") {
-          toast({
-            title: "אין הרשאות גישה",
-            description: "בקשתך לגישה למערכת נדחתה",
-            variant: "destructive"
-          });
-        } else if (permission === null) {
-          setRequestSent(false);
-        } else if (permission === "pending") {
-          setRequestSent(true);
-        }
-  
-        setPermissionsLoaded(true); // 🚀 נסמן שהטעינה הסתיימה
-      } catch (error) {
-        console.error("Error checking user session:", error);
-        setCurrentUser(null);
-        setUserPermission(null);
-        setPermissionsLoaded(true);
+      } catch (err) {
+        console.log("❌ Failed to restore user:", err);
       } finally {
+        setPermissionsLoaded(true);
         setLoading(false);
       }
-    };
+    };    
   
-    checkUserSession();
-  }, [navigate, checkUserPermission]);
-
+    restoreUser();
+  }, [setCurrentUser]);
+  
   const handleLogin = async () => {
     try {
+      // מבצע את ההתחברות
       const userInfo = await login();
-
+  
       if (!userInfo || typeof userInfo.email !== 'string' || !userInfo.email.trim()) {
-        throw new Error("Invalid user data");
+        console.log('Invalid user data, email missing');
+        return;
       }
-
-      const user = await User.login(userInfo.email, userInfo.name || '');
-      setCurrentUser(user);
-
+  
+      // עדכון המידע של המשתמש ב-UserContext
+      setCurrentUser(userInfo);
+  
+      // בודק את ההרשאות של המשתמש
       const permission = await checkUserPermission(userInfo.email);
       setUserPermission(permission);
-
-      if (permission === "approved") 
+  
+      // אם ההרשאות מאושרות, מעביר לדף הבית
+      if (permission === "approved") {
         navigate(createPageUrl("Dashboard"));
+      }
     } 
     catch (error) {
-      console.error("Login error:", error);
+      console.log("Login error:", error);
     }
   };
+  
 
   const handleLogout = async () => {
     try {
-      logout();
-      window.location.reload();
+      logout();             // קורא ל-POST /logout
+      setCurrentUser(null);       // מנקה את המשתמש מה־context
+      setUserPermission(null);    // אופציונלי: מנקה גם את ההרשאות
+      navigate("/");              // חוזר לדף הראשי
     } catch (error) {
-      console.error('Logout error:', error);
+      console.log('Logout error:', error);
     }
-  };
+  };  
 
   // Loading screen
   if (loading) {

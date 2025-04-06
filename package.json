@@ -3,12 +3,16 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "_moduleAliases": {
+    "@": "src"
+  },
   "scripts": {
+    "start": "node server.js",
     "dev": "vite --port 5182",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start-server": "node src/server/server.js"
+    "deploy": "clear && npm run build && npm run start"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.772.0",

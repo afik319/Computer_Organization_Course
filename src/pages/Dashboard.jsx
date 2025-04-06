@@ -1,8 +1,8 @@
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Book, GraduationCap, Trophy, Clock, Edit, Loader2, Users } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom"; 
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,12 +18,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
-import { User } from "@/api/entities";
 import { RegisteredUser } from "@/api/entities";
 import { Lesson } from "@/api/entities";
 import { Exam } from "@/api/entities";
 import { ExamResult } from "@/api/entities";
 import { CourseContent } from "@/api/entities";
+import { useUser } from "../context/UserContext";
 
 const SUPER_ADMIN_EMAIL = "afik.ratzon@gmail.com";
 
@@ -40,17 +40,19 @@ export default function Dashboard() {
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [editingField, setEditingField] = useState(null);
   const [courseContent, setCourseContent] = useState(null);
-  const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [dataLoading, setDataLoading] = useState(true);
-  const navigate = useNavigate();
+  const { currentUser, setCurrentUser } = useUser();
 
   const loadData = async () => {
     try {
+      const user = currentUser;
+      if (!user || !user.email) {
+        console.warn("No user found or user has no email – skipping data load");
+        return;
+      }
+
       setDataLoading(true);
-      console.log("Starting to load dashboard data...");
-      
-      const user = await User.me();
       setCurrentUser(user);
 
       if (user && user.email && user.email !== SUPER_ADMIN_EMAIL) {
@@ -72,8 +74,7 @@ export default function Dashboard() {
         ExamResult.list()
     ]);
     
-    // טוען את השיעורים מה-JSON במקום מה-API
-    const lessons = Lesson.getAllLessons();
+    const lessons = await Lesson.getAllLessons();
     
       if (courseContents && courseContents.length > 0) {
         setCourseContent(courseContents[0]);
@@ -83,7 +84,6 @@ export default function Dashboard() {
       
       if (isSuperAdmin) {
         const users = await RegisteredUser.filter({ status: "approved" });
-        console.log("Admin - Approved users:", users.length);
         
         const uniqueUsers = new Map();
         for (const user of users) {
@@ -93,7 +93,6 @@ export default function Dashboard() {
           }
         }
         const uniqueUserList = Array.from(uniqueUsers.values());
-        console.log("Admin - Unique approved users:", uniqueUserList.length);
         
         setStats({
           totalLessons: lessons.length,
@@ -101,19 +100,16 @@ export default function Dashboard() {
           totalUsers: uniqueUserList.length
         });
       } else {
-        console.log("Calculating stats for regular user:", user.email);
         
-        // בדיקה שהמבחן עדיין קיים במערכת על ידי יצירת מפה של מזהי המבחנים הקיימים
         const availableExamIds = new Set(exams.map(exam => exam.id));
         
-        // סינון תוצאות המבחנים רק למשתמש הנוכחי ולמבחנים שעדיין קיימים במערכת
+        const normalize = (email) => String(email || "").trim().toLowerCase();
+
         const userResults = examResults.filter(result => 
-          result.created_by === user.email && 
+          normalize(result.created_by) === normalize(user.email) && 
           availableExamIds.has(result.exam_id)
         );
-        
-        console.log("User exam results (only available exams):", userResults.length, userResults);
-        
+            
         // מציאת התוצאה האחרונה לכל מבחן (עבור מבחנים שהושלמו יותר מפעם אחת)
         const latestResultsMap = new Map();
         for (const result of userResults) {
@@ -124,7 +120,6 @@ export default function Dashboard() {
         }
         
         const userUniqueExams = Array.from(latestResultsMap.values());
-        console.log("User unique completed exams:", userUniqueExams.length);
         
         let totalScore = 0;
         for (const result of userUniqueExams) {
@@ -136,15 +131,6 @@ export default function Dashboard() {
         const averageScore = userUniqueExams.length > 0 
           ? totalScore / userUniqueExams.length 
           : 0;
-        
-        console.log("User stats:", {
-          totalLessons: lessons.length,
-          totalExams: exams.length,
-          examsTaken: userUniqueExams.length,
-          totalAvailableExams: exams.length,
-          averageScore,
-          totalScore
-        });
 
         setStats({
           totalLessons: lessons.length,
@@ -155,7 +141,7 @@ export default function Dashboard() {
         });
       }
     } catch (error) {
-      console.error("Error loading data:", error);
+      console.log("Error loading data:", error);
       toast({
         title: "שגיאה בטעינת נתונים",
         description: "אירעה שגיאה בטעינת הנתונים, אנא נסה שוב מאוחר יותר",
@@ -167,8 +153,12 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    loadData();
-  }, []);
+    if (currentUser && currentUser.email) {
+      loadData();
+    }
+  }, [currentUser]);
+  
+  
 
   const saveContent = async () => {
     try {
@@ -206,7 +196,7 @@ export default function Dashboard() {
       loadData();
       
     } catch (error) {
-      console.error("Error saving content:", error);
+      console.log("Error saving content:", error);
       toast({
         title: "שגיאה בשמירת התוכן",
         description: "אירעה שגיאה בשמירת השינויים",

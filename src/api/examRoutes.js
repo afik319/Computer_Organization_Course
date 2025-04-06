@@ -4,183 +4,214 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const router = express.Router();
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// מצביע על C:\Users\afikr\Desktop\אתר\קוד\src\data\exams.json
-const filePath = path.join(__dirname, '../data/exams.json');
+const examsPath = path.join(__dirname, '../data/exams.json');
+const resultsPath = path.join(__dirname, '../data/ExamResults.json');
 
-/**
- * לקרוא את exams.json
- */
 function readExamsFile() {
-  const fileData = fs.readFileSync(filePath, 'utf-8');
-  return JSON.parse(fileData); // מחזיר אובייקט JS
+  try {
+    if (!fs.existsSync(examsPath)) {
+      fs.writeFileSync(examsPath, JSON.stringify({ exams: [] }, null, 2));
+    }
+    const fileData = fs.readFileSync(examsPath, 'utf-8');
+    const parsed = JSON.parse(fileData);
+    return parsed && typeof parsed === 'object' ? parsed : { exams: [] };
+  } catch (err) {
+    console.log('Error initializing exams.json:', err);
+    return { exams: [] };
+  }
 }
 
-/**
- * לכתוב בחזרה ל-exams.json
- */
-function writeExamsFile(jsonObject) {
-  fs.writeFileSync(filePath, JSON.stringify(jsonObject, null, 2), 'utf-8');
+function readResultsFile() {
+  const fileData = fs.readFileSync(resultsPath, 'utf-8');
+  return JSON.parse(fileData); 
 }
 
-/** 
- * דוגמה לנתיב שמחזיר את כל הבחינות 
- */
-router.get('/exams', (req, res) => {
+function writeResultsFile(jsonObject) {
+  fs.writeFileSync(resultsPath, JSON.stringify(jsonObject, null, 2), 'utf-8');
+}
+
+// GET /api/exams
+router.get('/', (req, res) => {
   try {
     const data = readExamsFile();
-    // ב-exams.json רואים שיש מבנה { "exams": [...], "examResults": [...] }
-    // לכן נניח:
-    const exams = data.exams || [];
-    res.json(exams);
+    res.json(data.exams || []);
   } catch (err) {
-    console.error('Error reading exams:', err);
+    console.log('Error reading exams:', err);
     res.status(500).json({ error: 'Failed to read exams' });
   }
 });
 
-/**
- * עדכון בחינה קיימת (PUT /api/exams/:id)
- */
-router.put('/exams/:id', (req, res) => {
-  try {
-    const id = req.params.id;
-    const data = readExamsFile();
-    const exams = data.exams || [];
-
-    // מחפשים בחינה עם מזהה תואם
-    const index = exams.findIndex(ex => ex.id === id);
-    if (index === -1) {
-      return res.status(404).json({ error: 'Exam not found' });
-    }
-
-    // ניקח את הבחינה הקיימת, ונעדכן אותה בכל השדות שקיבלנו בגוף הבקשה (req.body).
-    const existingExam = exams[index];
-    const updatedExam = { 
-      ...existingExam,
-      ...req.body, 
-      // אפשרויות נוספות (לשמור על id ישן, לעדכן תאריך עדכון וכו')
-      updated_date: new Date().toISOString()
-    };
-
-    // שמירה במערך
-    exams[index] = updatedExam;
-
-    // כתיבה חזרה לקובץ
-    data.exams = exams;
-    writeExamsFile(data);
-
-    // מחזירים ללקוח את האובייקט המעודכן
-    return res.json(updatedExam);
-
-  } catch (err) {
-    console.error('Error updating exam:', err);
-    res.status(500).json({ error: 'Failed to update exam' });
-  }
-});
-
-/**
- * יצירת בחינה חדשה (POST /api/exams)
- */
-router.post('/exams', (req, res) => {
+// POST /api/exams
+router.post('/', (req, res) => {
   try {
     const data = readExamsFile();
     const exams = data.exams || [];
 
-    // צור מזהה חדש לבחינה
-    const newId = Date.now().toString();
-
-    // בונים את האובייקט החדש
     const newExam = {
-      ...req.body,
-      id: newId,
+      id: Date.now().toString(),
       created_date: new Date().toISOString(),
-      updated_date: new Date().toISOString()
+      updated_date: new Date().toISOString(),
+      ...req.body,
     };
 
     exams.push(newExam);
-    data.exams = exams;
-    writeExamsFile(data);
+    fs.writeFileSync(examsPath, JSON.stringify({ exams }, null, 2), 'utf-8');
 
-    return res.json(newExam);
+    res.status(201).json(newExam);
   } catch (err) {
-    console.error('Error creating exam:', err);
+    console.log('Error creating exam:', err);
     res.status(500).json({ error: 'Failed to create exam' });
   }
 });
 
-/**
- * מחיקת בחינה (DELETE /api/exams/:id)
- */
-router.delete('/exams/:id', (req, res) => {
+// PUT /api/exams/:id
+router.put('/:id', (req, res) => {
   try {
-    const id = req.params.id;
+    const examId = req.params.id;
+    const updatedFields = req.body;
+
     const data = readExamsFile();
-    const exams = data.exams || [];
+    let exams = data.exams || [];
 
-    const filtered = exams.filter(ex => ex.id !== id);
-    data.exams = filtered;
-    writeExamsFile(data);
+    let updated = false;
+    exams = exams.map(exam => {
+      if (exam.id === examId) {
+        updated = true;
+        return {
+          ...exam,
+          ...updatedFields,
+          updated_date: new Date().toISOString(),
+        };
+      }
+      return exam;
+    });
 
+    if (!updated) {
+      return res.status(404).json({ error: 'Exam not found' });
+    }
+
+    fs.writeFileSync(examsPath, JSON.stringify({ exams }, null, 2), 'utf-8');
     res.json({ success: true });
   } catch (err) {
-    console.error('Error deleting exam:', err);
+    console.log('Error updating exam:', err);
+    res.status(500).json({ error: 'Failed to update exam' });
+  }
+});
+
+// DELETE /api/exams/:id
+router.delete('/:id', (req, res) => {
+  try {
+    const examId = req.params.id;
+    const data = readExamsFile();
+    let exams = data.exams || [];
+
+    const filtered = exams.filter(exam => exam.id !== examId);
+    if (filtered.length === exams.length) {
+      return res.status(404).json({ error: 'Exam not found' });
+    }
+
+    fs.writeFileSync(examsPath, JSON.stringify({ exams: filtered }, null, 2), 'utf-8');
+    res.json({ success: true });
+  } catch (err) {
+    console.log('Error deleting exam:', err);
     res.status(500).json({ error: 'Failed to delete exam' });
   }
 });
 
-router.get('/exam-results', (req, res) => {
+// GET /api/exams/results
+router.get('/results', (req, res) => {
   try {
-      const data = readExamsFile();
-      const results = data.examResults || [];
-      res.json(results);
+    const data = readResultsFile();
+    res.json(data.examResults || []);
   } catch (err) {
-      console.error('Error reading exam results:', err);
-      res.status(500).json({ error: 'Failed to read exam results' });
+    console.log('Error reading exam results:', err);
+    res.status(500).json({ error: 'Failed to read exam results' });
   }
 });
 
-router.post('/exam-results', (req, res) => {
+// POST /api/exams/results
+router.post('/results', (req, res) => {
   try {
-      const data = readExamsFile();
-      const results = data.examResults || [];
+    const data = readResultsFile();
+    let results = data.examResults || [];
 
-      // חיפוש תוצאה קיימת
-      const existingIndex = results.findIndex(
-          r => r.exam_id === req.body.exam_id && r.created_by === req.body.created_by
-      );
+    results = results.filter(result => !(result.exam_id === req.body.exam_id && result.created_by === req.body.created_by));
 
-      if (existingIndex !== -1) {
-          // אם יש תוצאה קיימת – נעדכן אותה
-          results[existingIndex] = {
-              ...results[existingIndex],
-              ...req.body,
-              updated_date: new Date().toISOString()
-          };
-      } else {
-          // אם אין – ניצור חדשה
-          const newResult = {
-              ...req.body,
-              id: req.body.id || Date.now().toString(),
-              created_date: new Date().toISOString(),
-              updated_date: new Date().toISOString()
-          };
-          results.push(newResult);
+    const newResult = {
+      ...req.body,
+      id: req.body.id || Date.now().toString(),
+      created_date: new Date().toISOString(),
+      updated_date: new Date().toISOString()
+    };
+
+    results.push(newResult);
+    data.examResults = results;
+    writeResultsFile(data);
+
+    res.json({ success: true, newResult });
+  } catch (err) {
+    console.log('Error saving exam result:', err);
+    res.status(500).json({ error: 'Failed to save exam result' });
+  }
+});
+
+// PUT /api/exams/results/:id
+router.put('/results/:id', (req, res) => {
+  try {
+    const resultId = req.params.id;
+    const updatedFields = req.body;
+
+    const data = readResultsFile();
+    let results = data.examResults || [];
+
+    let updated = false;
+    results = results.map(result => {
+      if (result.id === resultId) {
+        updated = true;
+        return {
+          ...result,
+          ...updatedFields,
+          updated_date: new Date().toISOString()
+        };
       }
+      return result;
+    });
 
-      // שמירה בקובץ
-      data.examResults = results;
-      writeExamsFile(data);
+    if (!updated) {
+      return res.status(404).json({ error: 'Result not found' });
+    }
 
-      res.json({ success: true });
+    data.examResults = results;
+    writeResultsFile(data);
+    res.json({ success: true });
   } catch (err) {
-      console.error('Error saving exam result:', err);
-      res.status(500).json({ error: 'Failed to save exam result' });
+    console.log('Error updating exam result:', err);
+    res.status(500).json({ error: 'Failed to update exam result' });
   }
 });
 
+// DELETE /api/exams/results/:id
+router.delete('/results/:id', (req, res) => {
+  try {
+    const resultId = req.params.id;
+    const data = readResultsFile();
+    const before = data.examResults || [];
+    const after = before.filter(result => result.id !== resultId);
+
+    if (after.length === before.length) {
+      return res.status(404).json({ error: 'Result not found' });
+    }
+
+    data.examResults = after;
+    writeResultsFile(data);
+    res.json({ success: true });
+  } catch (err) {
+    console.log('Error deleting exam result:', err);
+    res.status(500).json({ error: 'Failed to delete exam result' });
+  }
+});
 
 export default router;

@@ -1,6 +1,7 @@
 import express from 'express';
 import fs from 'fs/promises';
 import path from 'path';
+import { logger } from '@/lib/logger.js';
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ router.post('/update-lessons', async (req, res) => {
     await fs.writeFile(jsonPath, JSON.stringify(req.body, null, 2));
     res.status(200).json({ success: true });
   } catch (err) {
-    console.error('Error updating lessons:', err);
+    logger.info('Error updating lessons:', err);
     res.status(500).json({ error: 'Failed to update lessons' });
   }
 });

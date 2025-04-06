@@ -25,7 +25,7 @@ function LessonVideo({ lesson }) {
           setVideoUrl(lesson.video_url);
         }
       } catch (err) {
-        console.error('Error fetching video URL:', err);
+        console.log('Error fetching video URL:', err);
         setError('שגיאה בטעינת הוידאו');
       } finally {
         setIsLoading(false);

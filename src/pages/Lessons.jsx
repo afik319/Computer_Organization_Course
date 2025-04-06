@@ -1,30 +1,28 @@
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createPageUrl } from "@/utils";
-import { Button } from "@/components/ui/button";
 import { Plus, Loader2 } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import LessonList from "../components/lessons/LessonList";
 import LessonForm from "../components/lessons/LessonForm";
 import LessonViewer from "../components/lessons/LessonViewer";
-import { User } from "@/api/entities";
 import { Lesson } from "@/api/entities";
+import { useUser } from "@/context/UserContext";
+import { Button } from "@/components/ui/button";
 
-// Define super admin email directly here too
 const SUPER_ADMIN_EMAIL = "afik.ratzon@gmail.com";
 
 export default function LessonsPage() {
   const [lessons, setLessons] = useState([]);
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [showForm, setShowForm] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+  const { currentUser, setCurrentUser } = useUser();
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   const loadLessons = async () => {
     try {
-      const fetchedLessons = Lesson.getAllLessons();
+      const fetchedLessonsRaw = await Lesson.getAllLessons();
+      const fetchedLessons = Array.isArray(fetchedLessonsRaw) ? fetchedLessonsRaw : [];
       
       try {
         const uniqueTopics = [...new Set(fetchedLessons.map(lesson => lesson.topic))];
@@ -75,18 +73,29 @@ export default function LessonsPage() {
           
           const updatedTopics = [...savedTopics, ...newTopics];
           localStorage.setItem('lessonTopics', JSON.stringify(updatedTopics));
+          window.dispatchEvent(new Event('storage'));
+
         }
       } catch (error) {
-        console.error("Error processing topics:", error);
+        console.log("Error processing topics:", error);
       }
       
+      const extractTopicNumber = (topicId) => {
+        const match = topicId.match(/topic_(\d+)/);
+        return match ? parseInt(match[1]) : 0;
+      };
+
       const sortedLessons = [...fetchedLessons].sort((a, b) => {
-        if (a.topic !== b.topic) {
-          return a.topic.localeCompare(b.topic);
+        const topicA = extractTopicNumber(a.topic);
+        const topicB = extractTopicNumber(b.topic);
+      
+        if (topicA !== topicB) {
+          return topicA - topicB;
         }
+      
         const orderA = Number(a.order) || 0;
         const orderB = Number(b.order) || 0;
-        
+      
         return orderA - orderB;
       });
       
@@ -98,7 +107,7 @@ export default function LessonsPage() {
       
       return sortedLessons;
     } catch (error) {
-      console.error("Error loading lessons:", error);
+      console.log("Error loading lessons:", error);
       return [];
     }
   };
@@ -107,26 +116,23 @@ export default function LessonsPage() {
     const initPage = async () => {
       try {
         setLoading(true);
-        
-        try {
-          const user = await User.me();
-          setCurrentUser(user);
-        } catch (error) {
-          console.error("Error getting user:", error);
-          setLoading(false);
+  
+        if (!currentUser || !currentUser.email) {
+          console.warn("No user or email found – skipping lessons load");
           return;
         }
-        
+  
         await loadLessons();
       } catch (error) {
-        console.error("Error initializing lessons page:", error);
+        console.log("Error initializing lessons page:", error);
       } finally {
         setLoading(false);
       }
     };
-    
+  
     initPage();
-  }, []);
+  }, [currentUser]);
+  
 
   const handleSaveLesson = async (lessonData) => {
     try {
@@ -134,34 +140,31 @@ export default function LessonsPage() {
         ...lessonData,
         order: Number(lessonData.order)
       };
-      
-      console.log("Saving lesson with order:", lessonToSave.order, typeof lessonToSave.order);
-      
+            
       if (lessonToSave.id) {
         await Lesson.update(lessonToSave.id, lessonToSave);
         toast({
           title: "שיעור עודכן",
           description: "השיעור עודכן בהצלחה",
         });
-      } else {
+        } 
+      else {
         await Lesson.create(lessonToSave);
         toast({
           title: "שיעור נוצר",
           description: "השיעור נוצר בהצלחה",
         });
-      }
+        }
       
       setShowForm(false);
-      
       const updatedLessons = await loadLessons();
-      
+      setLessons(updatedLessons); 
       if (!lessonToSave.id && updatedLessons.length > 0) {
         const newLesson = updatedLessons.find(l => 
           l.title === lessonToSave.title && l.topic === lessonToSave.topic
         );
-        if (newLesson) {
+        if (newLesson) 
           setSelectedLesson(newLesson);
-        }
       } else if (lessonToSave.id) {
         const updatedLesson = updatedLessons.find(l => l.id === lessonToSave.id);
         if (updatedLesson) {
@@ -169,7 +172,7 @@ export default function LessonsPage() {
         }
       }
     } catch (error) {
-      console.error("Error saving lesson:", error);
+      console.log("Error saving lesson:", error);
       toast({
         title: "שגיאה",
         description: "אירעה שגיאה בשמירת השיעור",
@@ -187,13 +190,16 @@ export default function LessonsPage() {
     try {
       await Lesson.delete(lessonId);
       
-      alert("השיעור נמחק בהצלחה");
+      toast({
+        title: "מחיקה",
+        description: "השיעור נמחק בהצלחה",
+        variant: "default"
+      });
       
       await loadLessons();
       
       setSelectedLesson(null);
     } catch (error) {
-      alert("Error deleting lesson:", error);
       toast({
         title: "שגיאה",
         description: "אירעה שגיאה במחיקת השיעור",

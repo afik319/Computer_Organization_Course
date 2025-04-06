@@ -27,14 +27,11 @@ export default function ExamList({ exams, results, onSelect, selectedExam, onEdi
   const safeExams = Array.isArray(exams) ? exams : [];
   const safeResults = Array.isArray(results) ? results : [];
   
-  // יצירת מפה של תוצאות אחרונות לכל מבחן
   const latestResults = new Map();
   safeResults.forEach(result => {
-    if (result.created_by === currentUserEmail) {
-      if (!latestResults.has(result.exam_id) || 
-          new Date(result.created_date) > new Date(latestResults.get(result.exam_id).created_date)) {
+    if (result.created_by?.toLowerCase().trim() === currentUserEmail?.toLowerCase().trim()) {
+      if (!latestResults.has(result.exam_id) || new Date(result.created_date) > new Date(latestResults.get(result.exam_id).created_date)) 
         latestResults.set(result.exam_id, result);
-      }
     }
   });
 

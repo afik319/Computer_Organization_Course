@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, HardDrive, FileText, Video, Image, FileBadge, FileQuestion, Users } from "lucide-react";
 import { User } from "@/api/entities";
@@ -8,37 +8,38 @@ import { Exam } from "@/api/entities";
 import { ExamResult } from "@/api/entities";
 import { CourseContent } from "@/api/entities";
 import { RegisteredUser } from "@/api/entities";
+import { useUser } from "@/context/UserContext";
 
 const SUPER_ADMIN_EMAIL = "afik.ratzon@gmail.com";
 
 export default function StorageInfo() {
   const [storageInfo, setStorageInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState(null);
+  const { currentUser, setCurrentUser } = useUser();
 
   useEffect(() => {
     const loadStorageInfo = async () => {
       try {
-        setIsLoading(true);
-        
-        // Get current user
+        setIsLoading(true);       
         const user = await User.me();
-        setCurrentUser(user);
-        
-        // Check if user is admin
-        if (!user || user.email !== SUPER_ADMIN_EMAIL) {
-          setIsLoading(false);
-          return;
-        }
+      if (!user) 
+        console.log('User not found or no email in query param');
+      setCurrentUser(user);
+      
+      // Check if user is admin
+      if (!user || user.email !== SUPER_ADMIN_EMAIL) {
+        setIsLoading(false);
+        return;
+      }
 
-        // Load all data to calculate size
-        const lessons = Lesson.getAllLessons(); // טוען מה-JSON במקום מה-API
-        const [exams, examResults, courseContents, registeredUsers] = await Promise.all([
-          Exam.list(),
-          ExamResult.list(),
-          CourseContent.list(),
-          RegisteredUser.list()
-        ]);
+      // Load all data to calculate size
+      const lessons = Lesson.getAllLessons(); // טוען מה-JSON במקום מה-API
+      const [exams, examResults, courseContents, registeredUsers] = await Promise.all([
+        Exam.list(),
+        ExamResult.list(),
+        CourseContent.list(),
+        RegisteredUser.list()
+      ]);
 
 
         // Count attachments and videos
@@ -100,7 +101,7 @@ export default function StorageInfo() {
           }
         });
       } catch (error) {
-        console.error("Error loading storage info:", error);
+        console.log("Error loading storage info:", error);
       } finally {
         setIsLoading(false);
       }

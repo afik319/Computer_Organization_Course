@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { User } from "@/api/entities";
 import { RegisteredUser } from "@/api/entities";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-// import storage from "../storage";
+import { useUser } from "@/context/UserContext";
 import {
   Card,
   CardContent,
@@ -71,11 +71,13 @@ export default function UserManagementPage() {
   const [newUserName, setNewUserName] = useState("");
   const [newUserStatus, setNewUserStatus] = useState("pending");
   const navigate = useNavigate();
+  const { currentUser } = useUser();
   
   const checkUserPermissions = useCallback(async () => {
     try {
       const user = await User.me();
-      
+      if (!user) 
+        console.log('User not found or no email in query param');
       if (!user || user.email !== SUPER_ADMIN_EMAIL) {
         navigate(createPageUrl("Dashboard"));
         return false;
@@ -83,7 +85,7 @@ export default function UserManagementPage() {
       return true;
     } 
     catch (error) {
-      console.error("Error checking permission:", error);
+      console.log("Error checking permission:", error);
       navigate(createPageUrl("Dashboard"));
       return false;
     }
@@ -131,7 +133,7 @@ export default function UserManagementPage() {
       
     } 
     catch (error) {
-      console.error("Error loading data:", error);
+      console.log("Error loading data:", error);
       toast({
         title: "שגיאה בטעינת נתונים",
         description: "אירעה שגיאה בטעינת רשימת המשתמשים",
@@ -143,7 +145,7 @@ export default function UserManagementPage() {
   }, [checkUserPermissions]);
   
   useEffect(() => {
-    //console.error("USER OBJECT:", User);
+    //console.log("USER OBJECT:", User);
     loadData();
   }, [loadData]);
 
@@ -170,7 +172,7 @@ export default function UserManagementPage() {
         description: "המשתמש הוסר בהצלחה מהמערכת",
       });
     } catch (error) {
-      console.error("Error deleting user:", error);
+      console.log("Error deleting user:", error);
       toast({
         title: "שגיאה במחיקת משתמש",
         description: "אירעה שגיאה בהסרת המשתמש",
@@ -181,16 +183,6 @@ export default function UserManagementPage() {
   
   const handleApproveUser = async (user) => {
       try {
-        // const allUsers = storage.get("users") || [];
-    
-        // // עדכון הסטטוס של המשתמש למאושר
-        // const updatedUsers = allUsers.map(u =>
-        //   u.email === user.email ? { ...u, status: "approved", approval_date: new Date().toISOString() } : u
-        // );
-    
-        // storage.set("users", updatedUsers);
-        // setUsers(updatedUsers);
-
            // מעדכן את הסטטוס ל־approved ב־RegisteredUser (ששומר תחת "registeredUsers")
         await RegisteredUser.update(user.id, {
           status: "approved",
@@ -206,7 +198,7 @@ export default function UserManagementPage() {
         });
     
       } catch (error) {
-        console.error("Error approving user:", error);
+        console.log("Error approving user:", error);
         toast({
           title: "שגיאה באישור משתמש",
           description: "אירעה שגיאה באישור בקשת המשתמש",
@@ -218,13 +210,6 @@ export default function UserManagementPage() {
     
     const handleRejectUser = async (user) => {
       try {
-        // const allUsers = storage.get("users") || [];
-    
-        // // הסרת המשתמש מהרשימה
-        // const updatedUsers = allUsers.filter(u => u.email !== user.email);
-    
-        // storage.set("users", updatedUsers);
-        // setUsers(updatedUsers);
         
            // אפשרות 1: למחוק לגמרי
         await RegisteredUser.remove(user.id);
@@ -238,7 +223,7 @@ export default function UserManagementPage() {
         });
     
       } catch (error) {
-        console.error("Error rejecting user:", error);
+        console.log("Error rejecting user:", error);
         toast({
           title: "שגיאה בדחיית משתמש",
           description: "אירעה שגיאה בדחיית בקשת המשתמש",
@@ -298,7 +283,7 @@ export default function UserManagementPage() {
         description: "המשתמש נוסף למערכת",
       });
     } catch (error) {
-      console.error("Error adding user:", error);
+      console.log("Error adding user:", error);
       toast({
         title: "שגיאה בהוספת משתמש",
         description: "אירעה שגיאה בהוספת המשתמש",
@@ -328,7 +313,7 @@ export default function UserManagementPage() {
         description: "הערות המשתמש עודכנו בהצלחה",
       });
     } catch (error) {
-      console.error("Error updating notes:", error);
+      console.log("Error updating notes:", error);
       toast({
         title: "שגיאה בעדכון הערות",
         description: "אירעה שגיאה בעדכון הערות המשתמש",

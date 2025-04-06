@@ -13,18 +13,6 @@
       "created_by": "afik.ratzon@gmail.com"
     },
     {
-      "email": "gylysymyntyb@gmail.com",
-      "full_name": "גילי סימן טוב",
-      "status": "approved",
-      "request_date": "2025-03-19T00:53:25.431Z",
-      "approval_date": "2025-03-19T00:53:30.803Z",
-      "notes": null,
-      "id": "67da158582cf23484edc5141",
-      "created_date": "2025-03-19T00:53:25.505000",
-      "updated_date": "2025-03-19T00:53:31.145000",
-      "created_by": "gylysymyntyb@gmail.com"
-    },
-    {
       "email": "noa207207@gmail.com",
       "full_name": "Noa Elharrar",
       "status": "approved",
@@ -37,16 +25,38 @@
       "created_by": "noa207207@gmail.com"
     },
     {
-      "email": "andro3199@gmail.com",
-      "full_name": "שי שלומי",
+      "email": "omer8118@gmail.com",
+      "full_name": "עומר לבל",
       "status": "approved",
-      "request_date": "2025-03-23T23:34:25.878Z",
-      "approval_date": "2025-03-23T23:34:44.575Z",
-      "notes": null,
-      "id": "88317455-b6b6-4a2d-b486-510d9e6fcb26",
-      "created_date": "2025-03-23T23:34:25.894Z",
-      "updated_date": "2025-03-23T23:38:41.771Z",
+      "request_date": "2025-03-24T15:37:33.796Z",
+      "approval_date": "2025-03-24T15:37:49.093Z",
+      "notes": "",
+      "id": "933bccb9-1927-4545-a1b6-7c3d01957ae3",
+      "created_date": "2025-03-24T15:37:33.798Z",
+      "updated_date": "2025-03-24T15:37:48.720Z",
       "created_by": "system"
+    },
+    {
+      "email": "mazal.r167@gmail.com",
+      "full_name": "מזל רצון",
+      "status": "approved",
+      "request_date": "2025-03-24T15:48:28.822Z",
+      "approval_date": "2025-03-24T15:48:32.841Z",
+      "notes": "",
+      "id": "349bc937-a98e-4695-93b4-d51e6815c2ac",
+      "created_date": "2025-03-24T15:48:29.197Z",
+      "updated_date": "2025-03-24T15:48:32.447Z",
+      "created_by": "system"
+    },
+    {
+      "id": "008239a2-fa16-4bdd-a874-ddc64010246c",
+      "email": "gylysymyntyb@gmail.com",
+      "full_name": "גילי סימן טוב",
+      "status": "approved",
+      "created_date": "2025-04-06T01:18:19.782Z",
+      "approval_date": "2025-04-06T01:18:26.111Z",
+      "updated_date": "2025-04-06T01:18:27.111Z"
     }
-  ]
+  ],
+  "currentUserEmail": "afik.ratzon@gmail.com"
 }

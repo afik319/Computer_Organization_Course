@@ -65,7 +65,7 @@ export default function ExamTaker({
         await onComplete(exam.id, answers, finalScore, false);
       
     } catch (error) {
-      console.error("[handleSubmit] Error submitting exam:", error);
+      console.log("[handleSubmit] Error submitting exam:", error);
     } finally {
       setSubmitting(false);
     }

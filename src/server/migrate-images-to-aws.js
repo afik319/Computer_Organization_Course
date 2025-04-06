@@ -1,5 +1,6 @@
 import AWS from 'aws-sdk';
 import dotenv from 'dotenv';
+import { logger } from '../lib/logger.js';
 
 dotenv.config();
 
@@ -14,7 +15,7 @@ const PREFIX = 'uploads/';
 
 async function setPublicRead() {
   try {
-    console.log(`🔍 Fetching files from bucket: ${BUCKET_NAME}/${PREFIX}`);
+    logger.info(`🔍 Fetching files from bucket: ${BUCKET_NAME}/${PREFIX}`);
 
     // שליפת כל הקבצים בתיקייה 'uploads'
     const listObjects = await s3.listObjectsV2({
@@ -23,12 +24,12 @@ async function setPublicRead() {
     }).promise();
 
     if (!listObjects.Contents || listObjects.Contents.length === 0) {
-      console.log('🚫 No files found.');
+      logger.info('🚫 No files found.');
       return;
     }
 
     for (const file of listObjects.Contents) {
-      console.log(`🚀 Setting public-read permission for: ${file.Key}`);
+      logger.info(`🚀 Setting public-read permission for: ${file.Key}`);
 
       // שינוי ה-ACL ל-public-read
       await s3.putObjectAcl({
@@ -37,12 +38,12 @@ async function setPublicRead() {
         ACL: 'public-read'
       }).promise();
 
-      console.log(`✅ ${file.Key} is now public-read`);
+      logger.info(`✅ ${file.Key} is now public-read`);
     }
 
-    console.log('🎉 All files have been set to public-read!');
+    logger.info('🎉 All files have been set to public-read!');
   } catch (err) {
-    console.error(`❌ Error: ${err.message}`);
+    logger.info(`❌ Error: ${err.message}`);
   }
 }
 

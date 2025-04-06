@@ -14,7 +14,7 @@ const getTopicLabel = (topicId) => {
       return topic ? topic.label : topicId;
     }
   } catch (error) {
-    console.error("Error getting topic label:", error);
+    console.log("Error getting topic label:", error);
   }
   
   // ברירת מחדל אם לא מצאנו את הנושא או הייתה שגיאה
@@ -27,7 +27,14 @@ export default function LessonList({ lessons, onSelect, selectedLesson, onEdit }
   
   // יצירת מיפוי נושאים ייחודיים
   const sortedLessons = safeLessons.slice().sort((a, b) => a.order - b.order);
-  const topics = Array.from(new Set(sortedLessons.map(l => l.topic)));
+  const extractTopicNumber = (topicId) => {
+    const match = topicId.match(/topic_(\d+)/);
+    return match ? parseInt(match[1]) : 0;
+  };
+  
+  const topics = Array.from(new Set(sortedLessons.map(l => l.topic)))
+    .sort((a, b) => extractTopicNumber(a) - extractTopicNumber(b));
+  
 
   // Early return if no lessons
   if (safeLessons.length === 0) {

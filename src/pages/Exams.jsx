@@ -1,7 +1,5 @@
 
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { createPageUrl } from "@/utils";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus, Loader2 } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
@@ -18,10 +16,9 @@ import {
 import ExamList from "../components/exams/ExamList";
 import ExamForm from "../components/exams/ExamForm";
 import ExamTaker from "../components/exams/ExamTaker";
-
-// Import entities directly
 import { User } from "@/api/entities";
 import { Exam, ExamResult } from "@/api/entities";
+import { useUser } from "@/context/UserContext";
 
 
 // Define super admin email directly here too
@@ -33,7 +30,7 @@ export default function ExamsPage() {
   const [selectedExam, setSelectedExam] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [takingExam, setTakingExam] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+  const { currentUser, setCurrentUser } = useUser();
   const [loading, setLoading] = useState(true);
   const [examToDelete, setExamToDelete] = useState(null);
   const [showResults, setShowResults] = useState(false);
@@ -63,7 +60,7 @@ export default function ExamsPage() {
       
       return { exams: sortedExams, results: fetchedResults };
     } catch (error) {
-      console.error("Error loading data:", error);
+      console.log("Error loading data:", error);
       return { exams: [], results: [] };
     }
   };
@@ -73,12 +70,14 @@ export default function ExamsPage() {
       try {
         setLoading(true);
         
-        // Get current user
         try {
           const user = await User.me();
+          if (!user) 
+            console.log('User not found or no email in query param');
           setCurrentUser(user);
-        } catch (error) {
-          console.error("Error getting user:", error);
+        } 
+        catch (error) {
+          console.log("Error getting user:", error);
           setLoading(false);
           return;
         }
@@ -86,7 +85,7 @@ export default function ExamsPage() {
         // Load exams and results
         await loadData();
       } catch (error) {
-        console.error("Error initializing exams page:", error);
+        console.log("Error initializing exams page:", error);
       } finally {
         setLoading(false);
       }
@@ -132,7 +131,7 @@ export default function ExamsPage() {
         }
       }
     } catch (error) {
-      console.error("Error saving exam:", error);
+      console.log("Error saving exam:", error);
       toast({
         title: "שגיאה",
         description: "אירעה שגיאה בשמירת הבחינה",
@@ -170,7 +169,7 @@ export default function ExamsPage() {
       await loadData();
       
     } catch (error) {
-      console.error("Error deleting exam:", error);
+      console.log("Error deleting exam:", error);
       toast({
         title: "שגיאה",
         description: "אירעה שגיאה במחיקת הבחינה",
@@ -199,11 +198,12 @@ export default function ExamsPage() {
       });
   
       setExamScore(score);
-      
       setShowResults(true);
+      const { results: updatedResults } = await loadData();
+      setResults(updatedResults);
   
     } catch (error) {
-      console.error("[handleExamComplete] Error:", error);
+      console.log("[handleExamComplete] Error:", error);
     } finally {
       isProcessing = false;
     }

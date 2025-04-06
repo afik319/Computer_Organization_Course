@@ -1,13 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from '@/App.jsx';
-import '@/index.css';
+import App from './App';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { UserProvider } from "@/context/UserContext"; // חובה לייבא
 
-const CLIENT_ID = "997527215580-7h2pv2s2j68ojfqsgf41re9l8e959j0f.apps.googleusercontent.com";
+import './index.css';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <GoogleOAuthProvider clientId={CLIENT_ID}>
-    <App />
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <GoogleOAuthProvider clientId={clientId}>
+    <UserProvider> {/* עוטף את כל האפליקציה */}
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </UserProvider>
   </GoogleOAuthProvider>
 );

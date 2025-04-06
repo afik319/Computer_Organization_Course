@@ -2,6 +2,7 @@ import { fileURLToPath } from 'url';
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
+import { logger } from '../lib/logger.js';
 
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
@@ -12,11 +13,10 @@ const filePath = path.join(__dirname, '../data/examTopics.json');
 router.get('/topics', (req, res) => {
   try {
     const data = fs.readFileSync(filePath);
-    console.error('Topics data loaded:', data);
     const topics = JSON.parse(data);
     res.json(topics);
   } catch (error) {
-    console.error('Error reading topics:', error);
+    logger.info('Error reading topics:', error);
     res.status(500).json({ error: 'Failed to load topics' });
   }
 });
@@ -36,7 +36,7 @@ router.post('/topics', (req, res) => {
     fs.writeFileSync(filePath, JSON.stringify(topics, null, 2));
     res.json(newTopic);
   } catch (error) {
-    console.error('Error adding topic:', error);
+    logger.info('Error adding topic:', error);
     res.status(500).json({ error: 'Failed to add topic' });
   }
 });
@@ -52,7 +52,7 @@ router.delete('/topics/:id', (req, res) => {
     fs.writeFileSync(filePath, JSON.stringify(topics, null, 2));
     res.json({ success: true });
   } catch (error) {
-    console.error('Error deleting topic:', error);
+    logger.info('Error deleting topic:', error);
     res.status(500).json({ error: 'Failed to delete topic' });
   }
 });

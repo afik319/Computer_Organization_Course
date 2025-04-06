@@ -13,7 +13,7 @@ export default function UnauthorizedPage() {
       await User.logout();
       navigate(createPageUrl("Dashboard"));
     } catch (error) {
-      console.error("Error during logout:", error);
+      console.log("Error during logout:", error);
       // Even if logout fails, redirect to dashboard
       navigate(createPageUrl("Dashboard"));
     }

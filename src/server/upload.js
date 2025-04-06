@@ -3,6 +3,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import express from 'express';
 import dotenv from 'dotenv';
 import multer from 'multer';
+import { logger } from '../lib/logger.js';
 
 dotenv.config();
 const router = express.Router();
@@ -16,7 +17,11 @@ const s3 = new S3Client({
 });
 const BUCKET_NAME = process.env.AWS_PUBLIC_BUCKET_NAME;
 const storage = multer.memoryStorage();
-const upload = multer({ storage });
+const upload = multer({ 
+  storage,
+  limits: { fileSize: 15 * 1024 * 1024 } // 100MB
+});
+
 
 router.get('/upload-url', async (req, res) => {
   try {
@@ -36,7 +41,7 @@ router.get('/upload-url', async (req, res) => {
       key: fileName
     });
   } catch (err) {
-    console.error('❌ Error generating upload URL:', err);
+    logger.info('❌ Error generating upload URL:', err);
     res.status(500).json({ error: 'Failed to generate upload URL', details: err.message });
   }
 });
@@ -57,7 +62,7 @@ router.get('/get-file-url', async (req, res) => {
 
     res.json({ url: fileUrl });
   } catch (err) {
-    console.error("❌ Error generating file URL:", err);
+    logger.info("❌ Error generating file URL:", err);
     res.status(500).json({ error: 'Failed to generate file URL', details: err.message });
   }
 });
@@ -65,8 +70,10 @@ router.get('/get-file-url', async (req, res) => {
 router.post('/upload-pdf', upload.single('file'), async (req, res) => {
   try {
     if (!req.file) {
+      logger.info('⚠️ No file received');
       return res.status(400).json({ error: 'No file provided' });
     }
+    logger.info(`📄 File received: ${req.file.originalname} (${req.file.size} bytes)`);
 
     const fileName = `lesson-${Date.now()}-${req.file.originalname}`;
     const params = {
@@ -83,10 +90,10 @@ router.post('/upload-pdf', upload.single('file'), async (req, res) => {
 
     const fileUrl = `https://${BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/uploads/${fileName}`;
 
-    console.log('✅ PDF uploaded:', fileUrl);
+    logger.info(`✅ PDF uploaded: ${fileUrl}`);
     res.status(200).json({ url: fileUrl });
   } catch (err) {
-    console.error('❌ Error uploading PDF:', err);
+    logger.info('❌ Error uploading PDF:', err);
     res.status(500).json({ error: 'Failed to upload file', details: err.message });
   }
 });

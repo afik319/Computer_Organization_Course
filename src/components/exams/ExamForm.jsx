@@ -46,7 +46,7 @@ export default function ExamForm({ exam, onSave, onCancel }) {
       const data = await response.json();
       setAvailableTopics(data);
       } catch (error) {
-        console.error("Error loading topics:", error);
+        console.log("Error loading topics:", error);
         //setAvailableTopics(defaultTopics); // במקרה של כשל, טוען את ברירת המחדל
       }
     };    
@@ -89,7 +89,7 @@ export default function ExamForm({ exam, onSave, onCancel }) {
       setShowTopicDialog(false);
   
     } catch (error) {
-      console.error("Error adding new topic:", error);
+      console.log("Error adding new topic:", error);
     }
   };  
 
@@ -111,7 +111,7 @@ export default function ExamForm({ exam, onSave, onCancel }) {
       }
       
     } catch (error) {
-      console.error("Error deleting topic:", error);
+      console.log("Error deleting topic:", error);
     }
   };
   
@@ -191,7 +191,6 @@ export default function ExamForm({ exam, onSave, onCancel }) {
     setUploading(prev => [...prev, questionIndex]);
   
     try {
-      console.log(`Starting image upload for question ${questionIndex}. Size: ${file.size} bytes, Name: ${file.name}`);
   
       const { url, key } = await getUploadUrl(file.name, file.type);
   
@@ -202,9 +201,7 @@ export default function ExamForm({ exam, onSave, onCancel }) {
           'Content-Type': file.type
         }
       });
-  
-      console.log(`Upload completed successfully. Key: ${key}`);
-  
+    
       const response = await fetch(`/api/get-file-url?fileName=${key}`);
       if (!response.ok) throw new Error(`Failed to get file URL: ${response.statusText}`);
           
@@ -217,7 +214,7 @@ export default function ExamForm({ exam, onSave, onCancel }) {
         description: "התמונה הועלתה לשאלה בהצלחה",
       });
     } catch (error) {
-      console.error('Upload failed:', error);
+      console.log('Upload failed:', error);
       toast({
         title: "שגיאה בהעלאת התמונה",
         description: "אירעה שגיאה בהעלאת התמונה, נסה שנית",
@@ -283,7 +280,7 @@ export default function ExamForm({ exam, onSave, onCancel }) {
     try {
       onSave(formData);
     } catch (error) {
-      console.error("Error saving exam:", error);
+      console.log("Error saving exam:", error);
       setError("אירעה שגיאה בשמירת הבחינה");
     } finally {
       setLoading(false);
