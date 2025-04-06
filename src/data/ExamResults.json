@@ -16,19 +16,6 @@
       "updated_date": "2025-04-06T00:07:02.407Z"
     },
     {
-      "exam_id": "67db39bbf0537a05df33a5ce",
-      "answers": [
-        3,
-        2
-      ],
-      "score": 100,
-      "completed_date": "2025-04-06T00:07:29.676Z",
-      "created_by": "andro3199@gmail.com",
-      "id": "1743898050771",
-      "created_date": "2025-04-06T00:07:30.771Z",
-      "updated_date": "2025-04-06T00:07:30.771Z"
-    },
-    {
       "exam_id": "67db2b4cecceb6041dd43ab4",
       "answers": [
         0,
@@ -57,6 +44,19 @@
       "id": "1743898255163",
       "created_date": "2025-04-06T00:10:55.163Z",
       "updated_date": "2025-04-06T00:10:55.163Z"
+    },
+    {
+      "exam_id": "67db39bbf0537a05df33a5ce",
+      "answers": [
+        0,
+        4
+      ],
+      "score": 0,
+      "completed_date": "2025-04-06T11:12:23.088Z",
+      "created_by": "andro3199@gmail.com",
+      "id": "1743937943086",
+      "created_date": "2025-04-06T11:12:23.086Z",
+      "updated_date": "2025-04-06T11:12:23.086Z"
     }
   ],
   "exportDate": "",

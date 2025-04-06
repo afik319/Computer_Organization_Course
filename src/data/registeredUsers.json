@@ -56,6 +56,15 @@
       "created_date": "2025-04-06T01:18:19.782Z",
       "approval_date": "2025-04-06T01:18:26.111Z",
       "updated_date": "2025-04-06T01:18:27.111Z"
+    },
+    {
+      "id": "42ba1f90-7ae3-41c2-8d25-b065338b7167",
+      "email": "andro3199@gmail.com",
+      "full_name": "שי שלומי",
+      "status": "approved",
+      "created_date": "2025-04-06T11:11:34.551Z",
+      "approval_date": "2025-04-06T11:11:49.570Z",
+      "updated_date": "2025-04-06T11:11:49.575Z"
     }
   ],
   "currentUserEmail": "afik.ratzon@gmail.com"
