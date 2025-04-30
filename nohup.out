@@ -1,0 +1,50 @@
+
+> computer-organization-app@0.0.0 deploy
+> clear && npm run build && npm run start
+
+[H[2J[3J
+> computer-organization-app@0.0.0 build
+> vite build
+
+vite v6.2.2 building for production...
+transforming...
+✓ 3009 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.55 kB │ gzip:   0.35 kB
+dist/assets/index-3jMepEC1.css   71.82 kB │ gzip:  12.24 kB
+dist/assets/react-DavUf6mE.js   141.72 kB │ gzip:  45.48 kB
+dist/assets/index-DGlE0zIx.js   737.49 kB │ gzip: 226.59 kB
+✓ built in 10.85s
+
+> computer-organization-app@0.0.0 start
+> node server.js
+
+🚀 Starting server...
+👉 After app.listen()
+✅ Server running on port 3001
+
+> computer-organization-app@0.0.0 deploy
+> clear && npm run build && npm run start
+
+[H[2J[3J
+> computer-organization-app@0.0.0 build
+> vite build
+
+vite v6.2.2 building for production...
+transforming...
+✓ 3009 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.55 kB │ gzip:   0.35 kB
+dist/assets/index-3jMepEC1.css   71.82 kB │ gzip:  12.24 kB
+dist/assets/react-DavUf6mE.js   141.72 kB │ gzip:  45.48 kB
+dist/assets/index-DGlE0zIx.js   737.49 kB │ gzip: 226.59 kB
+✓ built in 11.35s
+
+> computer-organization-app@0.0.0 start
+> node server.js
+
+🚀 Starting server...
+👉 After app.listen()
+✅ Server running on port 3001
